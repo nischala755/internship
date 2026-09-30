@@ -1,0 +1,3868 @@
+DRDO INTERNSHIP DIARY - RECONSTRUCTED WORKING DRAFT
+
+Coverage: 01 Jul 2026 to 01 Nov 2026
+Generated entries: 82 working days (last eligible day: 30 Oct 2026)
+
+IMPORTANT VERIFICATION NOTE
+This diary was reconstructed from project notebooks, file history, experiment
+records and guide discussions. Hours are reasonable 6-7 hour estimates. Verify
+each date and hour against actual attendance before university submission.
+Entries after 30 Sep 2026 are explicitly marked as planned because they were
+future dates when this document was prepared.
+
+Excluded: all Saturdays, all Sundays, and the following weekday holidays:
+26 Aug, 28 Aug, 04 Sep, 14 Sep, 02 Oct and 20 Oct 2026.
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**01 Jul 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Attended project orientation and discussed the internship objective: polarimetric ISAR-based fine recognition and component detection for space targets. Broke the work into literature study, dataset understanding, classification, oriented detection and evaluation stages.
+
+**Hours worked \***
+
+6.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Understood the distinction between target-level classification and component-level localization. Established a staged experimental workflow instead of directly training a large model.
+
+**Blockers / Risks**
+
+The exact expected deliverables and evaluation protocol required clarification during the initial discussion.
+
+## Skills
+
+**Skills Used\***
+
+Technical planning, radar imaging fundamentals, research methodology
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**02 Jul 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Studied radar, SAR and ISAR imaging principles, including range and cross-range formation, coherent processing and the effect of target rotation. Prepared notes connecting ISAR signatures with satellite geometry.
+
+**Hours worked \***
+
+6.50
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Learned why ISAR can form two-dimensional target structure from rotational motion and why scattering centres are important for recognition.
+
+**Blockers / Risks**
+
+Several radar terms were unfamiliar and required cross-checking across introductory references.
+
+## Skills
+
+**Skills Used\***
+
+ISAR fundamentals, literature review, technical note-taking
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**03 Jul 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Reviewed polarimetric radar concepts and the HH, HV, VH and VV channels. Compared co-polarized and cross-polarized returns and examined why polarization diversity may reveal different target components.
+
+**Hours worked \***
+
+6.50
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Recognized that each polarization channel contains complementary scattering information, motivating later magnitude, phase and fusion experiments.
+
+**Blockers / Risks**
+
+The physical interpretation of cross-polarized scattering was initially difficult to connect with the image data.
+
+## Skills
+
+**Skills Used\***
+
+Polarimetric radar, electromagnetic scattering, comparative analysis
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**06 Jul 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Read the available Pol-ISARSpaceTarget-1.0 dataset documentation and recorded its purpose, target classes and annotation formats. Created a checklist for verifying the downloaded folder structure.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Pol-ISARSpaceTarget-1.0 dataset paper; project study notes
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Identified the dataset as an electromagnetic-simulation benchmark containing six satellite categories and full-polarimetric complex data.
+
+**Blockers / Risks**
+
+The source paper and dataset documentation used terminology that required careful translation and interpretation.
+
+## Skills
+
+**Skills Used\***
+
+Dataset study, literature review, requirements analysis
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**07 Jul 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Inspected the dataset directories, including complex DAT data, amplitude images, Pauli images, DOTA labels and XML annotations. Verified representative filenames and polarization suffixes.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Pol_ISARSpaceTarget1.0 dataset folders
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Learned how filenames encode satellite class, elevation, azimuth and polarization, which later enabled automatic manifest construction.
+
+**Blockers / Risks**
+
+Duplicate downloaded files and multiple representations made initial file counting confusing.
+
+## Skills
+
+**Skills Used\***
+
+Python file handling, dataset auditing, pattern recognition
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**08 Jul 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Implemented an initial Python reader for complex DAT files and verified the expected interleaved real/imaginary layout. Reconstructed 256 x 256 complex arrays for sample channels.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Confirmed that preserving real and imaginary parts is necessary to retain phase; magnitude-only conversion discards part of the original signal.
+
+**Blockers / Risks**
+
+Incorrect shape or datatype assumptions can silently corrupt complex radar data, so strict size checks were added.
+
+## Skills
+
+**Skills Used\***
+
+Python, NumPy, binary data parsing, complex-valued signals
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**09 Jul 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Generated sample magnitude and phase images from complex channels using absolute value and atan2. Compared visual responses across HH, HV, VH and VV for the same target view.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Observed that magnitude emphasizes scattering intensity while phase contains structural information that is visually less intuitive but potentially discriminative.
+
+**Blockers / Risks**
+
+Phase wrapping near -pi and +pi required care when plotting and preprocessing.
+
+## Skills
+
+**Skills Used\***
+
+NumPy, Matplotlib, signal visualization, polarimetric analysis
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**10 Jul 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Prepared a preprocessing plan covering channel loading, resizing, normalization and label extraction. Defined separate paths for conventional magnitude CNNs and complex-valued models.
+
+**Hours worked \***
+
+6.50
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+A common manifest and reproducible split are essential for comparing different representations fairly.
+
+**Blockers / Risks**
+
+Balancing computational cost against preservation of complex information required design decisions.
+
+## Skills
+
+**Skills Used\***
+
+Experimental design, preprocessing, reproducibility
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**13 Jul 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Studied complex-valued neural network operations. Derived the real and imaginary outputs of complex convolution using paired real-valued convolutions and reviewed complex activations and normalization.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Understood how complex convolution preserves interactions between real and imaginary components instead of treating them as unrelated channels.
+
+**Blockers / Risks**
+
+Complex batch normalization is more involved than ordinary per-channel normalization.
+
+## Skills
+
+**Skills Used\***
+
+Complex neural networks, PyTorch, mathematical modelling
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**14 Jul 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Outlined the first ComplexCNN architecture with complex convolution blocks, residual connections, pooling and a six-class classifier. Defined the expected tensor shapes through the network.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Architecture diagrams must match the implemented tensor dimensions and classification objective exactly.
+
+**Blockers / Risks**
+
+An early design mixed classification and detection responsibilities and needed simplification.
+
+## Skills
+
+**Skills Used\***
+
+Deep-learning architecture, tensor-shape analysis, PyTorch
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**15 Jul 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Implemented core ComplexCNN layers and checked forward propagation on a small batch. Added deterministic seeds and basic runtime diagnostics for Colab.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+POLISAR_ComplexCNN_Classification_CLEAN.ipynb
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Small smoke tests catch channel and shape errors before expensive full training runs.
+
+**Blockers / Risks**
+
+Colab environment differences and GPU availability affected repeatability.
+
+## Skills
+
+**Skills Used\***
+
+PyTorch, unit testing, GPU computing, reproducibility
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**16 Jul 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Built the initial classification data loader for six satellite classes and ensured all four polarization channels from a frame were kept together. Checked class counts and sample labels.
+
+**Hours worked \***
+
+6.50
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Sample-level integrity is critical: mixing polarization channels from different views would create invalid training examples.
+
+**Blockers / Risks**
+
+The directory structure had to be interpreted carefully to avoid duplicate or incomplete samples.
+
+## Skills
+
+**Skills Used\***
+
+DataLoader design, pandas, dataset validation
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**17 Jul 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Ran a short ComplexCNN training experiment and monitored training/validation loss, accuracy and macro-F1. Saved the model history for later plotting.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Macro-F1 is important alongside accuracy because it gives equal weight to all target classes.
+
+**Blockers / Risks**
+
+The first run needed conservative batch size and memory monitoring in Colab.
+
+## Skills
+
+**Skills Used\***
+
+Model training, metrics, experiment tracking
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**20 Jul 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Reviewed the initial classification results and produced a confusion matrix. Investigated which satellite classes were confused and checked whether the split was balanced.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+A high aggregate score is insufficient without class-wise inspection and split verification.
+
+**Blockers / Risks**
+
+Unexpectedly high performance raised concern about correlated views and possible leakage.
+
+## Skills
+
+**Skills Used\***
+
+Confusion-matrix analysis, classification metrics, critical evaluation
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**21 Jul 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Removed the unnecessary detection/objectness branch from the clean ComplexCNN classification notebook. Retained the classifier and feature-extraction output required for later analysis.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+POLISAR_ComplexCNN_Classification_CLEAN.ipynb
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Model components must correspond directly to the task; an unused detector head complicates interpretation and training.
+
+**Blockers / Risks**
+
+Cleaning inherited multitask code required tracing every output and loss term.
+
+## Skills
+
+**Skills Used\***
+
+Code review, PyTorch refactoring, architecture validation
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**22 Jul 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Implemented magnitude-only, phase-only, magnitude-plus-phase, real/imaginary and complex-only feature representations. Standardized the feature extraction interface for controlled comparison.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Representation choice can have as much influence as classifier choice in polarimetric ISAR recognition.
+
+**Blockers / Risks**
+
+Flattened high-dimensional features increased memory and computation requirements.
+
+## Skills
+
+**Skills Used\***
+
+Feature engineering, NumPy, experimental controls
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**23 Jul 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Constructed feature matrices by resizing each polarization channel to 64 x 64 and concatenating selected representations. Verified dimensions, finite values and label alignment.
+
+**Hours worked \***
+
+6.50
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+The magnitude-plus-phase representation produced 32,768 values per frame when eight 64 x 64 maps were concatenated.
+
+**Blockers / Risks**
+
+Large dense matrices had to be processed carefully to avoid unnecessary RAM copies.
+
+## Skills
+
+**Skills Used\***
+
+Array programming, dimensionality checks, memory optimization
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**24 Jul 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Measured magnitude and phase ranges before normalization. Recorded the wide magnitude dynamic range and phase bounds close to -pi and +pi.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Magnitude and phase should not be normalized blindly with identical assumptions because their numerical distributions differ strongly.
+
+**Blockers / Risks**
+
+Outliers in scattering magnitude can dominate simple scaling methods.
+
+## Skills
+
+**Skills Used\***
+
+Exploratory data analysis, descriptive statistics, signal preprocessing
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**27 Jul 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Designed a normalization study comparing raw features, z-score, min-max [0,1], min-max [-1,1], robust-IQR and max-absolute scaling. Enforced train-only fitting of every scaler.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+POLISAR_Feature_Normalization_ResNet18_Study.ipynb
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Normalization parameters are learned quantities; using validation or test statistics would constitute data leakage.
+
+**Blockers / Risks**
+
+The earlier workflow needed revision to guarantee that no test information influenced scaling.
+
+## Skills
+
+**Skills Used\***
+
+Data leakage prevention, normalization, machine-learning methodology
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**28 Jul 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Implemented and tested the six normalization variants with feature classifiers. Saved validation and test tables for direct comparison.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Most representations were highly separable under the official split, while max-absolute scaling was less stable than the other methods.
+
+**Blockers / Risks**
+
+Near-perfect scores required cautious interpretation rather than immediate claims of generalization.
+
+## Skills
+
+**Skills Used\***
+
+scikit-learn, normalization, comparative evaluation
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**29 Jul 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Added ANOVA-F, classifier-weight, ExtraTrees-importance and mutual-information feature-selection experiments. Compared selected subsets using macro-F1.
+
+**Hours worked \***
+
+6.50
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Feature selection was more useful for interpretability and dimensionality reduction than for improving an already easy official split.
+
+**Blockers / Risks**
+
+Ranking tens of thousands of features was computationally expensive.
+
+## Skills
+
+**Skills Used\***
+
+Feature selection, statistical learning, model interpretation
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**30 Jul 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Downloaded and inspected the TFPSSTD dataset from IEEE DataPort. Verified Satellite I, II and III ZIP archives and counted 393 MAT files after extraction.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+TFPSSTD dataset in MyDrive/drdo; TFPSSTD_New_Dataset_Colab_Pipeline_RAM_SAFE.ipynb
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+TFPSSTD provides a second data source with a different organization and full-polarimetric reconstruction outputs.
+
+**Blockers / Risks**
+
+The download was large and required credentialed S3 access plus integrity checks.
+
+## Skills
+
+**Skills Used\***
+
+AWS CLI, IEEE DataPort, dataset verification, file management
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**31 Jul 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Investigated Colab RAM crashes while reading TFPSSTD MAT files. Reworked the pipeline to load one file at a time, use complex64 and resize inputs before batching.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+TFPSSTD_New_Dataset_Colab_Pipeline_RAM_SAFE_REVIEWED.ipynb
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Streaming and memory-mapped processing are essential when individual scientific files are tens of megabytes and the full archive is about 14.6 GB.
+
+**Blockers / Risks**
+
+Attempting to retain multiple complex128 arrays exhausted the Colab runtime memory.
+
+## Skills
+
+**Skills Used\***
+
+Memory profiling, SciPy MAT loading, RAM-safe pipeline design
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**03 Aug 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Completed a RAM-safe TFPSSTD manifest and inspected MAT keys, shapes and metadata fields such as range, cross-range, centre frequency and bandwidth. Documented usable image arrays.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+TFPSSTD_New_Dataset_Colab_Pipeline_RAM_SAFE_REVIEWED.ipynb
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Scientific MAT files may contain several algorithm outputs; model input must be selected explicitly instead of assuming the first array is correct.
+
+**Blockers / Risks**
+
+MAT key naming varied and required defensive inspection logic.
+
+## Skills
+
+**Skills Used\***
+
+SciPy, HDF5/MAT inspection, metadata analysis
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**04 Aug 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Prepared TFPSSTD classification experiments using view-disjoint AccAngle/StaAngle splits, handcrafted RCS-like features and train-only normalization.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+TFPSSTD_Classification_RAM_SAFE.ipynb
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+View-disjoint evaluation is stronger than random image splitting because adjacent radar views can be highly correlated.
+
+**Blockers / Risks**
+
+Class and angle balance had to be preserved simultaneously.
+
+## Skills
+
+**Skills Used\***
+
+Dataset partitioning, radar features, leakage-aware evaluation
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**05 Aug 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Added SGD logistic regression, linear SVM and Random Forest baselines for TFPSSTD feature vectors. Defined accuracy, macro-precision, macro-recall and macro-F1 reporting.
+
+**Hours worked \***
+
+6.50
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Classical baselines provide a useful reference before investing in deeper networks.
+
+**Blockers / Risks**
+
+High-dimensional inputs required scaling and restrained model settings for Colab memory.
+
+## Skills
+
+**Skills Used\***
+
+scikit-learn, classification, model benchmarking
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**06 Aug 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Added magnitude-only ResNet18 and an eight-channel real/imaginary CNN to the TFPSSTD notebook. Kept dataset-specific training separate from Pol-ISAR weights.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Cross-dataset weight reuse is not automatically valid when target types, simulation settings and image-generation pipelines differ.
+
+**Blockers / Risks**
+
+End-to-end image training remained expensive on the larger 601 x 601 source arrays.
+
+## Skills
+
+**Skills Used\***
+
+ResNet18, complex inputs, transfer-learning assessment
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**07 Aug 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Reviewed TFPSSTD outputs, documented RAM-safe execution steps and prepared a technical update for the guide. Identified cross-dataset testing as future robustness work.
+
+**Hours worked \***
+
+6.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Operational reliability and reproducible loading are research contributions when datasets are too large for naive workflows.
+
+**Blockers / Risks**
+
+Some experiments required longer uninterrupted GPU sessions than the free runtime allowed.
+
+## Skills
+
+**Skills Used\***
+
+Technical reporting, experiment review, Colab optimization
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**10 Aug 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Studied DOTA oriented bounding-box annotations for satellite components. Parsed eight polygon coordinates, class names and difficulty flags and visualized sample labels.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Oriented boxes are better suited than horizontal boxes for long rotated structures such as solar arrays and antennas.
+
+**Blockers / Risks**
+
+Polygon vertex ordering and coordinate normalization required careful handling.
+
+## Skills
+
+**Skills Used\***
+
+Computer vision, DOTA format, annotation visualization
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**11 Aug 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Converted DOTA polygons to Ultralytics YOLO-OBB normalized coordinates and validated labels against image dimensions. Added checks for malformed and out-of-range vertices.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+POLISAR_OBB_Detection_PauliFusion_YOLO.ipynb
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Annotation conversion must preserve all four corners and target orientation; ordinary xywh conversion would lose rotation.
+
+**Blockers / Risks**
+
+A few path and duplicate-file inconsistencies initially caused missing-image errors.
+
+## Skills
+
+**Skills Used\***
+
+YOLO-OBB, coordinate geometry, data validation
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**12 Aug 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Built a single-VV amplitude image baseline for oriented component detection. Created train, validation and test directories without loading the entire dataset into RAM.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+A strong single-channel baseline is necessary before claiming benefits from polarimetric fusion.
+
+**Blockers / Risks**
+
+One amplitude TIFF was missing under an expected duplicate filename, so the loader needed DAT fallback logic.
+
+## Skills
+
+**Skills Used\***
+
+Image preprocessing, YOLO dataset preparation, robust file handling
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**13 Aug 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Implemented fixed Pauli pseudo-colour fusion from polarimetric channels and prepared the corresponding OBB dataset. Compared qualitative contrast with single VV images.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Fixed physical fusion can expose different scattering mechanisms but does not guarantee better detection metrics.
+
+**Blockers / Risks**
+
+Pauli conventions and dynamic-range scaling needed consistent implementation.
+
+## Skills
+
+**Skills Used\***
+
+Polarimetric fusion, image processing, visualization
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**14 Aug 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Ran initial YOLO11n-OBB training for single-VV and Pauli inputs and collected precision, recall, mAP50 and mAP50-95. Saved best checkpoints and validation plots.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Detection evaluation requires both loose-IoU mAP50 and stricter mAP50-95; one metric alone can hide localization weakness.
+
+**Blockers / Risks**
+
+Training time and runtime disconnections required checkpoint persistence on Drive.
+
+## Skills
+
+**Skills Used\***
+
+Ultralytics, YOLO-OBB, GPU training, experiment tracking
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**17 Aug 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Designed a learnable polarimetric fusion stem using HH, HV, VH and VV magnitude/phase or real/imaginary channels to produce a three-channel detector input.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+POLISAR_OBB_LearnableFusion_YOLO_Comparison.ipynb
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+A learnable fusion module can adapt channel weighting to data, but image-level fusion may still discard task-specific information.
+
+**Blockers / Risks**
+
+Integrating a custom trainable stem with a pretrained detector required interface decisions.
+
+## Skills
+
+**Skills Used\***
+
+Neural fusion, PyTorch, polarimetric representation learning
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**18 Aug 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Prepared the learnable-fusion dataset and matched its split, image size and detector settings to the fixed baselines. Added caching to avoid regenerating fused images after disconnections.
+
+**Hours worked \***
+
+6.50
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Controlled comparisons require changing only the representation while holding training protocol constant.
+
+**Blockers / Risks**
+
+Generating fused representations repeatedly was slow without persistent caching.
+
+## Skills
+
+**Skills Used\***
+
+Experimental controls, caching, dataset engineering
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**19 Aug 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Compared completed YOLO11n-OBB results: single VV achieved mAP50 0.821 and mAP50-95 0.582; Pauli achieved 0.783/0.573; learned fusion achieved 0.743/0.518.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+The simplest VV input was strongest overall. Pauli improved precision in one run but reduced recall, and the first learned fusion did not improve detection.
+
+**Blockers / Risks**
+
+The result contradicted the expectation that more channels would automatically improve performance.
+
+## Skills
+
+**Skills Used\***
+
+Metric interpretation, ablation study, scientific reasoning
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**20 Aug 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Reviewed oriented-detection methods beyond YOLO and shortlisted CenterNet-OBB, DETR-style OBB, Rotated RetinaNet, Rotated Faster R-CNN, RoI Transformer and Oriented R-CNN.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+One-stage, two-stage and transformer detectors offer different localization and computational trade-offs.
+
+**Blockers / Risks**
+
+Many mature rotated detectors depend on MMRotate/MMCV versions incompatible with current Colab Python.
+
+## Skills
+
+**Skills Used\***
+
+Literature survey, object detection, model selection
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**21 Aug 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Implemented a lightweight pure-PyTorch CenterNet-OBB baseline with heatmap, size, offset and angle outputs. Added oriented-box decoding and metric computation.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+POLISAR_NonYOLO_OBB_PureTorch_Comparison.ipynb
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Anchor-free centre-based detection requires balanced heatmap and regression losses and careful angle representation.
+
+**Blockers / Risks**
+
+The initial model converged slowly and lagged far behind YOLO.
+
+## Skills
+
+**Skills Used\***
+
+CenterNet, PyTorch, multi-head losses, OBB decoding
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**24 Aug 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Implemented a compact DETR-OBB diagnostic baseline with learned object queries, transformer decoding and oriented box parameters. Verified matching and no-object handling.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Set-based detection avoids NMS but requires effective bipartite matching and substantially more training to converge.
+
+**Blockers / Risks**
+
+The lightweight DETR configuration produced weak recall under limited epochs.
+
+## Skills
+
+**Skills Used\***
+
+Transformers, DETR, Hungarian matching, oriented boxes
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**25 Aug 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Reviewed CenterNet-OBB and DETR-OBB training curves and corrected comparison code. Marked them as diagnostic baselines rather than competitive SOTA claims.
+
+**Hours worked \***
+
+6.50
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+POLISAR_NonYOLO_OBB_PureTorch_Comparison_REVIEWED.ipynb
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Negative results remain useful when their protocol and limitations are stated accurately.
+
+**Blockers / Risks**
+
+Loss reduction did not translate into competitive mAP, requiring careful interpretation.
+
+## Skills
+
+**Skills Used\***
+
+Model evaluation, debugging, research integrity
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**27 Aug 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Attempted an MMRotate environment for stronger non-YOLO methods and documented package conflicts involving Python, MMCV, MIM and setuptools. Evaluated isolated-environment options.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Research code ecosystems can be tightly version-coupled; environment compatibility should be treated as part of experiment design.
+
+**Blockers / Risks**
+
+MMCV-full failed to build under the available Colab Python version.
+
+## Skills
+
+**Skills Used\***
+
+Dependency management, MMRotate, environment debugging
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**31 Aug 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Consolidated August classification and detection findings into a guide update. Defined the next priority as long-epoch YOLO comparison, paper translation and a detection-aware fusion method.
+
+**Hours worked \***
+
+6.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+The current evidence supports strengthening the VV baseline before adding architectural complexity.
+
+**Blockers / Risks**
+
+Results came from notebooks with different run lengths, so direct comparisons needed protocol labels.
+
+## Skills
+
+**Skills Used\***
+
+Technical communication, research planning, results synthesis
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**01 Sep 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Extended pure-PyTorch non-YOLO training toward 80 epochs with checkpoint recovery and monitored overfitting. Exported loss and metric histories for later comparison.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+POLISAR_NonYOLO_OBB_PureTorch_Comparison_E80_FIXED.ipynb
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Longer training alone does not guarantee better detection when architecture, assignment and data regime are limiting factors.
+
+**Blockers / Risks**
+
+Long runs were vulnerable to Colab disconnects and required resumable checkpoints.
+
+## Skills
+
+**Skills Used\***
+
+Long-running experiments, checkpointing, performance analysis
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**02 Sep 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Prepared a controlled 100-epoch YOLO11n-OBB versus YOLO11s-OBB comparison using single VV. Added best/last checkpoints, patience and test evaluation.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+POLISAR_YOLO_OBB_LongEpoch_Comparison.ipynb
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Model-capacity comparisons must share the same split, input and augmentation policy.
+
+**Blockers / Risks**
+
+GPU time had to be managed carefully across two long detector runs.
+
+## Skills
+
+**Skills Used\***
+
+YOLO11, hyperparameter control, experiment automation
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**03 Sep 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Audited training and validation plots required by the guide, including box loss, classification loss, distribution focal loss and mAP curves. Defined a consistent reporting table.
+
+**Hours worked \***
+
+6.50
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Training/validation curves reveal capacity and overfitting more clearly than a final precision value alone.
+
+**Blockers / Risks**
+
+Older runs did not all preserve identical histories, so only traceable plots were retained.
+
+## Skills
+
+**Skills Used\***
+
+Learning-curve analysis, visualization, technical reporting
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**07 Sep 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Compared larger OBB models on T4 GPU and prepared YOLO26s-OBB and YOLO26m-OBB runs. Recorded resource use and controlled single-VV metrics.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+POLISAR_YOLO26_OBB_T4_Comparison.ipynb
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+The medium model improved the available result, reaching approximately 0.880 mAP50 and 0.667 mAP50-95 in the recorded run.
+
+**Blockers / Risks**
+
+Model naming and Ultralytics-version support had to be verified to avoid comparing incompatible checkpoints.
+
+## Skills
+
+**Skills Used\***
+
+Large-model training, Ultralytics, GPU resource management
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**08 Sep 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Diagnosed Colab package failures involving Pillow, Ultralytics and Python 3.13. Repaired the environment without downgrading unrelated core packages.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Aggressive pip installs can break preinstalled Colab dependencies; minimal pinned installation is safer.
+
+**Blockers / Risks**
+
+A mixed Pillow installation caused ImportError for PIL._typing._Ink.
+
+## Skills
+
+**Skills Used\***
+
+Python packaging, dependency debugging, Colab
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**09 Sep 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Reviewed and translated the Chinese Pol-ISAR dataset paper into English. Extracted dataset construction, simulation workflow, annotation protocol and baseline objectives.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Pol-ISARSpaceTarget-1.0_English_Translation_and_Summary.pdf
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+The paper primarily contributes a simulated full-polarimetric dataset and benchmark; it leaves room for stronger fusion and robust split evaluation.
+
+**Blockers / Risks**
+
+Technical terminology required context-aware translation rather than literal word substitution.
+
+## Skills
+
+**Skills Used\***
+
+Technical translation, paper reading, radar terminology
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**10 Sep 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Mapped the paper's methods against the implemented notebooks and identified reproducibility gaps: exact partition logic, model configuration, robustness evaluation and real-data transfer.
+
+**Hours worked \***
+
+6.50
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+A useful literature gap must be tied to measurable experiments rather than only proposing a new module.
+
+**Blockers / Risks**
+
+Some implementation details were not fully specified in the paper.
+
+## Skills
+
+**Skills Used\***
+
+Gap analysis, reproducibility, literature comparison
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**11 Sep 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Prepared an isolated MMRotate notebook for Rotated RetinaNet, Rotated Faster R-CNN, RoI Transformer and Oriented R-CNN. Documented the need for a compatible Python 3.10 runtime.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+POLISAR_PaperMethods_MMRotate_Isolated.ipynb
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Environment isolation is preferable to forcing legacy CV packages into modern Colab runtimes.
+
+**Blockers / Risks**
+
+The standard Colab image remained incompatible with required compiled MMCV components.
+
+## Skills
+
+**Skills Used\***
+
+MMRotate, environment design, rotated detection
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**15 Sep 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Prepared a DINOv3/ResNet18 backbone comparison concept and augmentation/backbone study notebook. Defined fair frozen-backbone and fine-tuning protocols.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+POLISAR_DINOv3_ResNet18_Backbone_Study.ipynb
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Backbone replacement is meaningful only when preprocessing, data split and detector head are held constant.
+
+**Blockers / Risks**
+
+Compute limits made full multi-backbone tuning impractical within a single session.
+
+## Skills
+
+**Skills Used\***
+
+Representation learning, backbone evaluation, experimental design
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**16 Sep 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Designed OBB-safe augmentation experiments with geometric transformations that update both image and oriented polygons. Separated photometric changes from coordinate-changing operations.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+POLISAR_YOLO_OBB_Augmentation_Backbone_Study.ipynb
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+For detection, rotating an image without rotating its labels creates incorrect supervision.
+
+**Blockers / Risks**
+
+General image augmentation libraries do not always preserve oriented-box geometry directly.
+
+## Skills
+
+**Skills Used\***
+
+Data augmentation, computational geometry, imgaug
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**17 Sep 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Reorganized the ComplexCNN classification material for presentation: motivation, complex arithmetic, architecture, attention maps, loss curves and confusion matrix.
+
+**Hours worked \***
+
+6.50
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+A technical presentation should tell why each model was introduced, not merely list architectures and scores.
+
+**Blockers / Risks**
+
+Some earlier diagrams were too generic and did not exactly match the notebook implementation.
+
+## Skills
+
+**Skills Used\***
+
+Architecture documentation, presentation design, model interpretation
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**18 Sep 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Prepared a concise project review covering literature survey, dataset, conventional CNN, ComplexCNN, K-fold results, normalization, object detection and future work.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Polarimetric ISAR Space Target Recognition and Detection.pptx
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Plots and confusion matrices communicate model behaviour more reliably than dense text.
+
+**Blockers / Risks**
+
+Fitting the complete project into a limited slide count required prioritizing verifiable results.
+
+## Skills
+
+**Skills Used\***
+
+Scientific presentation, results curation, visual communication
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**21 Sep 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Corrected claims in the presentation by separating completed results, provisional runs and planned work. Added proper IEEE-style citation for the dataset paper.
+
+**Hours worked \***
+
+6.50
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Clear status labels prevent planned experiments from being mistaken for completed evidence.
+
+**Blockers / Risks**
+
+Several plots originated from different protocols and could not be combined without qualification.
+
+## Skills
+
+**Skills Used\***
+
+Citation management, research integrity, technical editing
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**22 Sep 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Implemented the paper-aligned elevation/azimuth partitioning workflow and generated reproducible manifests. Added assertions for class counts, overlap and missing files.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+POLISAR_PaperPartition_YOLO_OBB.ipynb
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Partition design determines what generalization claim is valid; sample-random splits can overestimate performance on neighboring views.
+
+**Blockers / Risks**
+
+The paper's split description had to be translated into explicit, auditable code.
+
+## Skills
+
+**Skills Used\***
+
+Dataset partitioning, validation, reproducible research
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**23 Sep 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Applied YOLO-OBB to the paper-aligned partition and exported test metrics, predictions and learning curves. Compared the protocol with the authors' reported task setup.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+POLISAR_PaperPartition_YOLO_OBB.ipynb
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+A protocol-matched baseline is more informative than comparing headline numbers from different splits.
+
+**Blockers / Risks**
+
+Direct superiority claims were limited by incomplete equivalence of implementations and hardware.
+
+## Skills
+
+**Skills Used\***
+
+YOLO-OBB, benchmark reproduction, comparative analysis
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**24 Sep 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Built a rigorous 100-epoch conventional ResNet18 notebook using four-channel log-magnitude input, train-only normalization, strict split checks and checkpoint selection.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+POLISAR_ResNet18_100Epoch_Rigorous.ipynb
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+A conventional baseline must be as carefully controlled as the proposed complex model to make the comparison fair.
+
+**Blockers / Risks**
+
+An earlier cache file was empty after interruption, producing an EOFError and requiring integrity validation.
+
+## Skills
+
+**Skills Used\***
+
+ResNet18, normalization, cache validation, checkpointing
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**25 Sep 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Ran and reviewed the 100-epoch ResNet18 experiment. Investigated the very high official-split result using class balance, basename overlap and nearest-angle analysis.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+No exact filename overlap was found, but validation/test views were often only one azimuth degree from training views, making the task an easy within-domain interpolation problem.
+
+**Blockers / Risks**
+
+A 100% score could be misinterpreted as universal generalization without the angle-proximity audit.
+
+## Skills
+
+**Skills Used\***
+
+Leakage analysis, nearest-neighbour geometry, critical model evaluation
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**28 Sep 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Designed a stronger validation experiment combining data shuffling, five-fold cross-validation, azimuth grouping and an untouched official test set. Defined matched augmented and non-augmented regimes.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Grouping by azimuth reduces direct view correlation across folds and gives a more defensible estimate than ordinary random K-fold.
+
+**Blockers / Risks**
+
+Five folds times two regimes significantly increased total training cost.
+
+## Skills
+
+**Skills Used\***
+
+Cross-validation, grouped splitting, experiment design
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**29 Sep 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Implemented a four-channel imgaug pipeline with mild affine transforms, blur, intensity scaling and Gaussian noise. Ensured the same geometric transformation was applied jointly to HH, HV, VH and VV.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+POLISAR_ResNet18_ImgAug_Shuffled_5Fold_FIXED.ipynb
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Independent geometric transforms per polarization would destroy channel alignment; transforms must operate on the stacked four-channel image.
+
+**Blockers / Risks**
+
+imgaug 0.4.0 required NumPy 2 compatibility aliases without downgrading Colab packages.
+
+## Skills
+
+**Skills Used\***
+
+imgaug, multi-channel augmentation, NumPy compatibility
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**30 Sep 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Added per-fold train-only normalization, shuffled DataLoaders, 100-epoch resume-safe training and five-model soft-voting ensembles. Diagnosed checkpoint resumption when torch.load mapped the DataLoader RNG state to CUDA, restored it as a CPU ByteTensor and reran structural tests.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+POLISAR_ResNet18_ImgAug_Shuffled_5Fold_FIXED.ipynb
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Each fold must fit its own normalization statistics, and checkpoint files can contain device-sensitive state beyond model weights.
+
+**Blockers / Risks**
+
+The ten-run study required robust persistence; torch.Generator.set_state initially rejected the CUDA-mapped RNG tensor.
+
+## Skills
+
+**Skills Used\***
+
+PyTorch, StratifiedGroupKFold, ensembling, systematic debugging
+
+Entry status: Reconstructed completed-work entry.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**01 Oct 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Planned work: resume the five-fold augmented and non-augmented ResNet18 study, verify fold completion and consolidate histories from Drive. Check that no fold silently restarted after a runtime interruption.
+
+**Hours worked \***
+
+6.50
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Expected outcome: a complete auditable run table containing ten matched 100-epoch experiments.
+
+**Blockers / Risks**
+
+Risk: total GPU duration may exceed a single Colab allocation; checkpoint continuity must be monitored.
+
+## Skills
+
+**Skills Used\***
+
+Experiment monitoring, checkpoint recovery, Colab
+
+Entry status: Planned work entry; confirm after completion.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**05 Oct 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Planned work: calculate cross-validation mean and standard deviation for accuracy, macro-precision, macro-recall, macro-F1 and loss under both regimes.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Expected outcome: quantify whether augmentation improves average generalization or only changes individual folds.
+
+**Blockers / Risks**
+
+Risk: fold variance may be more informative than a very small difference in mean score.
+
+## Skills
+
+**Skills Used\***
+
+Statistical analysis, cross-validation, pandas
+
+Entry status: Planned work entry; confirm after completion.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**06 Oct 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Planned work: compare mean training and validation loss curves with fold-wise uncertainty bands. Identify convergence speed, capacity limits and possible overfitting.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Expected outcome: select the defensible checkpoint epoch range rather than relying only on the final epoch.
+
+**Blockers / Risks**
+
+Risk: label smoothing creates a non-zero loss floor and must be considered during interpretation.
+
+## Skills
+
+**Skills Used\***
+
+Learning-curve analysis, Matplotlib, model diagnostics
+
+Entry status: Planned work entry; confirm after completion.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**07 Oct 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Planned work: evaluate five-fold soft-voting ensembles on the untouched 162-image official test set and export class-wise reports and confusion matrices.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Expected outcome: obtain one final test result per regime without using test data for model selection.
+
+**Blockers / Risks**
+
+Risk: the official test still contains views close to training angles, limiting external-generalization claims.
+
+## Skills
+
+**Skills Used\***
+
+Model ensembling, classification metrics, leakage-aware evaluation
+
+Entry status: Planned work entry; confirm after completion.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**08 Oct 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Planned work: inspect augmented samples from all polarizations and confirm that transformations remain physically plausible. Adjust rotation, scaling and noise ranges only if artefacts are observed.
+
+**Hours worked \***
+
+6.50
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Expected outcome: establish an augmentation policy that improves robustness without changing target identity or destroying scattering structure.
+
+**Blockers / Risks**
+
+Risk: excessive transformations may create unrealistic ISAR signatures.
+
+## Skills
+
+**Skills Used\***
+
+Image augmentation, radar-domain validation, visualization
+
+Entry status: Planned work entry; confirm after completion.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**09 Oct 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Planned work: perform an augmentation ablation separating affine transforms, blur, amplitude scaling and additive noise. Record which operations influence fold stability.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Expected outcome: identify useful augmentation components rather than attributing improvement to the combined pipeline alone.
+
+**Blockers / Risks**
+
+Risk: additional ablations multiply training time, so a reduced epoch screening stage may be necessary.
+
+## Skills
+
+**Skills Used\***
+
+Ablation study, imgaug, experimental design
+
+Entry status: Planned work entry; confirm after completion.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**12 Oct 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Planned work: compare official-split performance with azimuth-grouped K-fold performance and explain the expected reduction caused by harder view separation.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Expected outcome: produce a clear evidence-based discussion of interpolation versus view-generalization performance.
+
+**Blockers / Risks**
+
+Risk: protocols cannot be ranked solely by score because they measure different difficulty levels.
+
+## Skills
+
+**Skills Used\***
+
+Benchmark analysis, dataset bias, scientific writing
+
+Entry status: Planned work entry; confirm after completion.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**13 Oct 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Planned work: consolidate classification results from conventional ResNet18, ComplexCNN, normalization and feature-selection studies into a protocol-labelled table.
+
+**Hours worked \***
+
+6.50
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Expected outcome: prevent misleading direct comparisons by listing input representation, split, epochs and selection criterion for every result.
+
+**Blockers / Risks**
+
+Risk: some older experiments may lack complete logs and must be labelled exploratory.
+
+## Skills
+
+**Skills Used\***
+
+Results curation, reproducibility, technical documentation
+
+Entry status: Planned work entry; confirm after completion.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**14 Oct 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Planned work: design the custom detection-aware polarimetric fusion architecture with separate co-polar and cross-polar stems followed by channel and spatial attention.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Expected outcome: fuse HH/HV/VH/VV features inside the detector instead of producing a fixed RGB-like image before detection.
+
+**Blockers / Risks**
+
+Risk: custom Ultralytics integration may require modifying model parsing and pretrained-weight loading.
+
+## Skills
+
+**Skills Used\***
+
+Neural architecture design, polarimetric fusion, attention mechanisms
+
+Entry status: Planned work entry; confirm after completion.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**15 Oct 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Planned work: specify exact tensor dimensions, convolution blocks and fusion points for the custom detector. Estimate parameters and memory use against YOLO11n/YOLO26m baselines.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Expected outcome: a buildable architecture diagram with no unspecified modules.
+
+**Blockers / Risks**
+
+Risk: early fusion may be memory-heavy, while late fusion may lose fine scattering interactions.
+
+## Skills
+
+**Skills Used\***
+
+Tensor-shape design, computational budgeting, model architecture
+
+Entry status: Planned work entry; confirm after completion.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**16 Oct 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Planned work: implement a small polarimetric stem accepting either eight real/imaginary channels or eight magnitude/phase channels. Unit-test output shapes and gradients.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Expected outcome: verify the fusion module independently before coupling it to an OBB detector.
+
+**Blockers / Risks**
+
+Risk: phase discontinuity near +/-pi may require sine/cosine encoding.
+
+## Skills
+
+**Skills Used\***
+
+PyTorch modules, complex features, unit testing
+
+Entry status: Planned work entry; confirm after completion.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**19 Oct 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Planned work: add channel-attention weights and log their values for HH, HV, VH and VV. Create visualizations showing polarization importance by component class.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Expected outcome: improve interpretability and determine whether the network consistently favours VV or uses cross-pol information selectively.
+
+**Blockers / Risks**
+
+Risk: attention weights are not automatically causal explanations.
+
+## Skills
+
+**Skills Used\***
+
+Attention mechanisms, interpretability, visualization
+
+Entry status: Planned work entry; confirm after completion.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**21 Oct 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Planned work: integrate the fusion stem with the OBB backbone and run a small smoke test on a reduced split. Verify loss calculation, label scaling and checkpoint serialization.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Expected outcome: an end-to-end trainable custom detector before committing to a full run.
+
+**Blockers / Risks**
+
+Risk: interface mismatches between custom tensors and the detector neck/head may require adapters.
+
+## Skills
+
+**Skills Used\***
+
+Model integration, OBB losses, debugging
+
+Entry status: Planned work entry; confirm after completion.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**22 Oct 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Planned work: define physics-informed consistency rules, including reciprocal HV/VH behaviour, polarization-energy relationships and augmentation constraints.
+
+**Hours worked \***
+
+6.50
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Expected outcome: convert radar-domain knowledge into measurable regularization terms or data-quality checks.
+
+**Blockers / Risks**
+
+Risk: simulation-specific assumptions must not be presented as universal physical laws.
+
+## Skills
+
+**Skills Used\***
+
+Physics-informed ML, polarimetry, regularization design
+
+Entry status: Planned work entry; confirm after completion.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**23 Oct 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Planned work: implement a soft HV/VH reciprocity consistency penalty and test it first on cached complex samples. Measure its scale relative to classification/detection loss.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Expected outcome: encourage physically coherent feature representations without overwhelming the primary task loss.
+
+**Blockers / Risks**
+
+Risk: the appropriate regularization coefficient will require controlled tuning.
+
+## Skills
+
+**Skills Used\***
+
+Custom loss functions, complex data, hyperparameter tuning
+
+Entry status: Planned work entry; confirm after completion.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**26 Oct 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Planned work: establish the final detector comparison matrix: single VV, fixed Pauli, image-level learned fusion and internal detection-aware fusion under the same partition.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Expected outcome: isolate whether performance gains come from representation, capacity or training protocol.
+
+**Blockers / Risks**
+
+Risk: all runs must use identical epochs, image size and evaluation code to remain comparable.
+
+## Skills
+
+**Skills Used\***
+
+Controlled experiments, OBB evaluation, ablation planning
+
+Entry status: Planned work entry; confirm after completion.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**27 Oct 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Planned work: run initial custom-detector training with conservative batch size and automatic mixed precision. Monitor GPU memory, loss components and gradient stability.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Expected outcome: confirm convergence and identify the most expensive module before the full experiment.
+
+**Blockers / Risks**
+
+Risk: multi-polarization inputs may reduce feasible batch size and destabilize normalization.
+
+## Skills
+
+**Skills Used\***
+
+GPU optimization, mixed precision, training diagnostics
+
+Entry status: Planned work entry; confirm after completion.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**28 Oct 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Planned work: evaluate custom detections qualitatively on several satellites and view angles. Compare localization of solar arrays, bodies, antennas and small fittings.
+
+**Hours worked \***
+
+6.50
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Expected outcome: identify class-specific benefits and failure modes hidden by aggregate mAP.
+
+**Blockers / Risks**
+
+Risk: small component classes may remain difficult because of scale and annotation density.
+
+## Skills
+
+**Skills Used\***
+
+Qualitative detection analysis, error analysis, visualization
+
+Entry status: Planned work entry; confirm after completion.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**29 Oct 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Planned work: prepare the research-paper experiment section with dataset protocol, preprocessing, baselines, metrics, ablations and reproducibility settings.
+
+**Hours worked \***
+
+7.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Expected outcome: a methods section that can be traced directly to saved notebooks, configurations and result files.
+
+**Blockers / Risks**
+
+Risk: provisional experiments must not be written as completed findings.
+
+## Skills
+
+**Skills Used\***
+
+Scientific writing, experiment documentation, IEEE structure
+
+Entry status: Planned work entry; confirm after completion.
+
+
+======================================================================
+
+Internship Diary Entry Details
+
+Internship
+
+**Intern at DRDO - DRDO**
+
+Date
+
+**30 Oct 2026**
+
+## What I worked on?
+
+**Work Summary \***
+
+Planned work: summarize completed internship progress and prepare the November review plan. Prioritize remaining full custom-detector runs, robustness tests and paper figures.
+
+**Hours worked \***
+
+6.00
+
+## Show Your Work (Links)
+
+**Reference Links**
+
+Project folder: MyDrive/drdo; Progress presentation and experiment notebooks
+
+## Blockers & Learnings
+
+**Learnings / Outcomes \***
+
+Expected outcome: a defensible milestone report linking each claim to an artifact or experiment log.
+
+**Blockers / Risks**
+
+Risk: limited remaining GPU time may require prioritizing the highest-value ablations.
+
+## Skills
+
+**Skills Used\***
+
+Project management, technical reporting, research planning
+
+Entry status: Planned work entry; confirm after completion.
+

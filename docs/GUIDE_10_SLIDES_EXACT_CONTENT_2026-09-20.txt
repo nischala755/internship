@@ -1,0 +1,164 @@
+TECHNICAL PROGRESS REVIEW | EXACT TEXT FOR 10 SLIDES
+Prepared 20 September 2026 | Project end date: 31 December 2026
+
+All figure filenames below are in ppt_assets_verified. Put the source line in
+small type at the bottom of its slide. "Proposed" and "planned" are not results.
+
+SLIDE 1 - Literature survey and research gap
+Title: Polarimetric ISAR component detection: published benchmark
+Body:
+  - Pol-ISARSpaceTarget-1.0 supplies four complex polarization channels and
+    oriented component annotations for fine-grained space-target recognition.
+  - The published comparison covers O-FCOS, PSC, O-RTMDet, O-ATSS, S2A-Net
+    and O-Faster R-CNN over 12 viewing-condition protocols.
+  - O-RTMDet has the best reported mean mAP50: 68.28% across those conditions.
+  - Research question: can phase-aware fusion improve detection on unseen views?
+Figure: translated_paper_method_map50.png
+Caption: Published mean mAP50 across 12 viewing conditions; NOT our result.
+Source: Dataset paper DOI 10.12466/xhcl.2025.08.013 and supplied English translation.
+
+SLIDE 2 - Dataset
+Title: Pol-ISARSpaceTarget-1.0: inputs, labels and split
+Body:
+  - 1,638 ISAR frames; six target identities; nine component classes.
+  - Four complex channels per frame: HH, HV, VH and VV; image size 256 x 256.
+  - 16,577 oriented component instances in the dataset report.
+  - Clean split: 1,314 train / 162 validation / 162 test frames.
+Figure: guide_slide02_polarizations_and_real_obbs.png
+Caption: One real Capella frame in four polarizations, with its VV component labels.
+Source: Pol-ISAR dataset TIFFImages and ImageSets/labelTxt; project dataset audit.
+
+SLIDE 3 - Classification using a conventional CNN
+Title: Magnitude-only ResNet18 baseline
+Body:
+  - Input: four polarization magnitude images; output: six target classes.
+  - ResNet18 was trained for 15 epochs.
+  - Held-out test accuracy: 41.36%; macro-F1: 38.05%.
+  - Training approached 99% accuracy, but validation was unstable: this run
+    did not generalize well. It was not a tuned, protocol-matched comparison.
+Figure: recovered_curves/resnet18_train_valid_loss.png
+Optional inset: guide_slide03_resnet18_measured_baseline.png
+Caption: Measured 15-epoch training and validation loss; validation divergence
+         limits the interpretation of this conventional-CNN run.
+Source: POLISAR_Feature_Normalization_ResNet18_Study (1).ipynb.
+
+SLIDE 4 - Classification using a complex CNN
+Title: Complex CNN with magnitude-phase feature fusion
+Body:
+  - Complex HH/HV/VH/VV data are processed by complex convolutions.
+  - A fully connected feature vector is combined with magnitude/phase features
+    for six-class classification; this slide is classification-only.
+  - Train-statistics-normalized held-out test: 97.53% accuracy,
+    97.49% macro-F1, 97.74% macro precision.
+  - An optional attention overlay comes from an earlier exploratory
+    cross-attention model, not the final clean ComplexCNN checkpoint.
+Figure: guide_slide04_clean_complexcnn_architecture.png
+Optional inset: complexcnn_attention_overlay.png
+Caption: Architecture of the clean classification-only model. Any attention
+         overlay must be labelled as a separate exploratory run.
+Source: POLISAR_ComplexCNN_Classification_CLEAN (2).ipynb and
+        POLISAR_ComplexCNN_Multitask_Colab_RESUME_SAFE (2).ipynb.
+
+SLIDE 5 - K-fold and held-out results
+Title: Five-fold validation exposes variation hidden by one split
+Body:
+  - Stratified five-fold evaluation on train + validation; eight epochs/fold.
+  - Fold accuracies (%): 99.66, 97.97, 97.97, 99.32, 96.61.
+  - Mean accuracy: 98.31 +/- 1.09 percentage points.
+  - Mean macro-F1: 98.29 +/- 1.11 percentage points.
+  - Held-out test: 158/162 correct (97.53%); four errors appear in the matrix.
+Figure: classification_test_confusion_matrix.png
+Optional inset: recovered_curves/complexcnn_5fold_train_valid_loss.png
+Caption: Rows are true target classes; columns are predicted target classes.
+Source: POLISAR_ComplexCNN_Classification_CLEAN (2).ipynb.
+
+SLIDE 6 - Normalization
+Title: Fit normalization on training samples only
+Body:
+  - Real and imaginary channel mean/std were computed on each fold's training
+    partition, then reused unchanged on that fold's validation partition.
+  - No standardization: 90.11 +/- 5.52% mean validation accuracy.
+  - Fold-training-only standardization: 98.31 +/- 1.09%.
+  - Selected learning rate: 3 x 10^-4, based on the training/validation sweep.
+  - Test-set statistics did not participate in fitting normalization.
+Figure: classification_kfold_normalization_comparison.png
+Caption: Accuracy across the same five fold positions with and without standardization.
+Source: POLISAR_ComplexCNN_Classification_CLEAN (1) and (2).ipynb.
+
+SLIDE 7 - Object detection
+Title: Oriented component detection: model capacity and fusion baselines
+Body:
+  - YOLO11n-OBB, VV: mAP50 82.1%; mAP50-95 58.2%.
+  - YOLO11n-OBB, fixed Pauli fusion: 78.3%; 57.3%.
+  - YOLO11n-OBB, learned fusion: 74.3%; 51.8%.
+  - At 100 epochs on VV, YOLO11s reached 85.28% / 62.90% and YOLO11m
+    reached 87.05% / 65.24% (mAP50 / mAP50-95).
+  - In a separate completed 100-epoch VV run, YOLO26s reached 85.90% / 65.01%
+    and YOLO26m reached 88.02% / 66.70% (mAP50 / mAP50-95).
+  - These are reported test values from separate executed runs; a matched
+    evaluation under one protocol is the next comparison.
+Figure: guide_slide07_yolo11s_m_capacity.png
+Optional second figure: guide_slide07_100epoch_yolo11_yolo26_reported_results.png
+Caption: Logged training box loss, original saved validation box loss and
+         validation precision/recall/harmonic-F1 for 100-epoch s/m runs.
+Source: Executed YOLO11 OBB notebook; supplied YOLO26 Colab result screenshots;
+        dataset duplicate-label audit. Separate runs are not a strict head-to-head.
+
+SLIDE 8 - Custom architecture and physics-informed rules
+Title: Completed baselines and proposed phase-aware fusion
+Body:
+  - Completed: 100-epoch VV-only YOLO11s/m and YOLO26s/m detector runs;
+    YOLO26m has the highest reported result, 88.02% mAP50 / 66.70% mAP50-95.
+  - Completed: an earlier 50-epoch YOLO11n comparison of VV, fixed Pauli and
+    learned fusion; VV was best in that comparison (82.1% mAP50).
+  - Proposed model input: complex scattering channels HH, HV, VH and VV.
+  - Physics-informed features: log magnitude and relative phase
+    delta_phi_p = arg(S_p * conjugate(S_VV)); encode phase as sin/cos.
+  - Conclusion: higher-capacity VV baselines are strong, while the initial
+    fusion variants did not improve over VV. A relative-phase-aware fusion
+    detector remains a testable hypothesis, not a demonstrated improvement.
+Figure: guide_slide08_proposed_physics_fusion_architecture.png
+Caption: Proposed relative-phase design; arrows show data flow, not trained
+         performance. Existing detector results are from separate runs.
+Source: Project proposal; inspired by cross-view gap in translated paper.
+
+SLIDE 9 - Testing and evaluation
+Title: Completed experiments and remaining evaluation checks
+Body:
+  - Completed: five-fold ComplexCNN classification and a held-out test;
+    50-epoch YOLO11n VV/Pauli/learned-fusion detection comparison.
+  - Completed: 100-epoch YOLO11s/m and YOLO26s/m VV-only OBB runs;
+    CenterNet-OBB and DETR-OBB-Lite prototype runs.
+  - Next: compare detector methods with the same image IDs, preprocessing,
+    postprocessing thresholds and reporting protocol.
+  - Next: evaluate unseen elevations/azimuths, noise/SNR robustness and
+    repeated-seed confidence intervals with class-wise AP/error analysis.
+Figure: guide_slide09_completed_vs_next_evaluation.png
+Caption: Completed runs and remaining checks are separated. Reported detector
+         test values come from separate experiments.
+Source: Executed project notebooks and supplied YOLO26 Colab screenshots;
+        project evaluation protocol for remaining work.
+
+SLIDE 10 - Remaining time and deliverables
+Title: Work plan to 31 December 2026
+Body:
+  - 20-30 September: consolidate completed runs and matched evaluation setup.
+  - October: OBB-safe augmentation study and O-RTMDet/O-Faster R-CNN baselines.
+  - November: implement phase-aware fusion; compare standard and unseen views.
+  - December: ablations, repeated runs, qualitative error analysis, paper draft
+    and guide review.
+  - Final deliverables: audited code, reproducible plots, benchmark tables and
+    a manuscript with claims supported by completed experiments.
+Figure: guide_slide10_revised_project_timeline.png
+Caption: Milestones through the confirmed project end date, 31 December 2026.
+Source: Project schedule supplied by researcher.
+
+PRESENTATION CHECKS
+- Do not plot the published 68.28% and our 87.05% as if they are directly
+  comparable: their evaluation protocols differ.
+- Do not describe the proposed phase-aware detector as implemented or tested.
+- Do not say the old 174-label detection test is a clean 162-image test.
+- Do not claim ComplexCNN is conclusively better than ResNet18: the CNN
+  experiment was not a matched, tuned architectural comparison.
+- All plots are real notebook outputs, plots computed from reported numbers,
+  original dataset samples, or clearly labelled proposed-protocol diagrams.

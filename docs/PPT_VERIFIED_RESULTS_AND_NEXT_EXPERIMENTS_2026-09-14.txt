@@ -1,0 +1,267 @@
+POLARIMETRIC ISAR PROJECT: VERIFIED RESULTS FOR PPT
+Audit date: 14 September 2026
+
+Use only the statistics below unless a later clean rerun supersedes them.
+
+1. DATASET
+
+Pol-ISARSpaceTarget-1.0:
+- 6 satellite classes.
+- 9 component classes.
+- 1,638 polarimetric ISAR frames.
+- 13,104 complex DAT files across HH, HV, VH and VV.
+- 16,577 oriented component instances.
+- Image size: 256 x 256.
+- Official paper split: 8:1:1.
+- Clean classification counts: train 1,314, validation 162, test 162.
+
+Important detection audit:
+- The executed YOLO notebooks evaluated 174 test label files, whereas the clean
+  local dataset and paper protocol contain 162 test images.
+- The additional files are consistent with Google Drive duplicate-suffixed
+  labels such as "(1)" being mapped to the original image.
+- Existing 174-image YOLO test results must therefore be labelled provisional.
+- New detection runs must canonicalize names and verify exactly 1,314/162/162
+  unique images before training or evaluation.
+
+2. COMPLEX CNN CLASSIFICATION: LEAKAGE-CONTROLLED RESULT
+
+Source: POLISAR_ComplexCNN_Classification_CLEAN (2).ipynb
+
+Protocol:
+- Complex CNN classification only; no detection head.
+- Five-fold stratified cross-validation on train + validation.
+- Eight epochs per fold.
+- Learning rate: 3e-4.
+- Normalization mean/std calculated separately from each fold's training data.
+- The same fold-training statistics were applied to that fold's validation data.
+- Augmentation was applied only to training samples.
+
+Five-fold validation accuracy:
+- Fold 1: 99.6622%
+- Fold 2: 97.9661%
+- Fold 3: 97.9661%
+- Fold 4: 99.3220%
+- Fold 5: 96.6102%
+- Mean: 98.3053%
+- Reported population standard deviation: 1.0935 percentage points.
+
+Five-fold validation macro-F1:
+- Fold 1: 99.6632%
+- Fold 2: 97.9581%
+- Fold 3: 97.9354%
+- Fold 4: 99.3260%
+- Fold 5: 96.5541%
+- Mean: 98.2873%
+- Reported population standard deviation: 1.1143 percentage points.
+
+Final official test result after training-statistics normalization:
+- Accuracy: 97.5309%
+- Macro precision: 97.7381%
+- Macro recall: 97.5309%
+- Macro-F1: 97.4864%
+- One-vs-rest AUC: 99.9040%
+- Test loss: 0.174839
+
+Final confusion matrix, rows=true and columns=predicted:
+[[23, 0, 0, 0, 3, 1],
+ [ 0,27, 0, 0, 0, 0],
+ [ 0, 0,27, 0, 0, 0],
+ [ 0, 0, 0,27, 0, 0],
+ [ 0, 0, 0, 0,27, 0],
+ [ 0, 0, 0, 0, 0,27]]
+
+Interpretation for PPT:
+- This is more credible than the earlier 100% holdout result.
+- The fold variation and four final test errors show that performance is high
+  but not perfect.
+- Avoid claiming that the model is universally robust; the split still contains
+  simulated views from the same six target identities.
+
+3. NORMALIZATION COMPARISON
+
+No standardization run:
+Source: POLISAR_ComplexCNN_Classification_CLEAN (1).ipynb
+- Five-fold mean validation accuracy: 90.1060% +/- 5.5206%.
+- Five-fold mean validation macro-F1: 88.8924% +/- 7.4484%.
+
+Fold-training-statistics standardization run:
+Source: POLISAR_ComplexCNN_Classification_CLEAN (2).ipynb
+- Five-fold mean validation accuracy: 98.3053% +/- 1.0935%.
+- Five-fold mean validation macro-F1: 98.2873% +/- 1.1143%.
+
+Conclusion:
+- Train-only standardization improved both average performance and stability.
+- Validation/test statistics were not used to compute normalization parameters.
+
+Learning-rate sweep with train-only standardization:
+- 1e-4: best validation accuracy 98.7654%, macro-F1 98.7650%.
+- 3e-4: best validation accuracy 100%, macro-F1 100%, loss 0.004633.
+- 1e-3: best validation accuracy 100%, macro-F1 100%, loss 0.007641.
+- Selected conservative learning rate: 3e-4.
+
+4. MAGNITUDE, PHASE AND COMPLEX FEATURE ABLATIONS
+
+Source: POLISAR_ComplexCNN_Multitask_Colab_RESUME_SAFE (2).ipynb
+These results use the easier official split and must be presented as ablations,
+not as proof of generalization.
+
+- Magnitude only: test accuracy/F1 100%; test loss 0.318878.
+- Phase only: test accuracy/F1 100%; test loss 0.265065.
+- Magnitude + phase: test accuracy/F1 100%; test loss 0.258074.
+- Real + imaginary: test accuracy/F1 100%; test loss 0.275643.
+- Complex-only CNN: test accuracy/F1 100%; test loss 0.282576.
+
+Interpretation:
+- Accuracy saturates on the official split, so loss and harder validation are
+  more informative than accuracy alone.
+- Magnitude + phase produced the lowest test loss among these five ablations.
+- The feature-fusion module should be described as a developed module intended
+  for later detection integration, not as a proven detector improvement.
+
+5. CROSS-ATTENTION FEATURE STUDY
+
+Source: POLISAR_ComplexCNN_Multitask_Colab_RESUME_SAFE (2).ipynb
+
+- Cross-attention transformer: test accuracy 99.3827%, macro-F1 99.3825%,
+  test loss 0.256237.
+- A later guide cross-attention run and SVM/RF/softmax probes reached 100% on
+  the official split; these saturated values should be shown cautiously.
+- Recorded inference time: approximately 13.686 ms/sample for the guide
+  cross-attention study.
+
+PPT requirement:
+- Show one real attention/activation overlay on an ISAR image.
+- Do not use a generic architecture graphic as a substitute for an attention map.
+
+6. RESNET18 MAGNITUDE-ONLY BASELINE
+
+Source: POLISAR_Feature_Normalization_ResNet18_Study (1).ipynb
+
+- Input: four magnitude channels.
+- Epochs: 15.
+- Test accuracy: 41.3580%.
+- Test macro-F1: 38.0532%.
+- Training accuracy approached 99%, while validation was unstable.
+- This run demonstrates overfitting/poor generalization and is useful as an
+  initial normal-CNN comparison, not as a tuned final ResNet18 result.
+
+7. TFPSSTD CLASSIFICATION
+
+Source: TFPSSTD classification notebook results previously executed.
+
+- Dataset: Satellite I, II and III; 393 MAT files.
+- View-disjoint group split by accumulation and starting angle.
+- Random Forest on raw magnitude+phase features: 100% test accuracy/F1.
+- ResNet18 magnitude-only from scratch: 96.9697% accuracy,
+  96.9962% macro-F1.
+- Small real+imag complex-input CNN: 94.9495% accuracy,
+  94.9871% macro-F1.
+- ANOVA-F selected 512 features: 78.7879% accuracy,
+  77.4691% macro-F1.
+
+8. POL-ISAR OBB DETECTION RESULTS
+
+Earlier YOLO11n-OBB inputs, provisional 174-image test:
+- Single VV: P 0.804, R 0.819, F1 0.8114, mAP50 0.821, mAP50-95 0.582.
+- Fixed Pauli: P 0.828, R 0.739, F1 0.7810, mAP50 0.783,
+  mAP50-95 0.573.
+- Learned fusion: P 0.770, R 0.683, F1 0.7239, mAP50 0.743,
+  mAP50-95 0.518.
+
+Larger YOLO11 models, 100 epochs, provisional 174-image test:
+- YOLO11s-OBB: P 0.8813, R 0.8256, mAP50 0.8528,
+  mAP50-95 0.6290; runtime 62.76 min.
+- YOLO11m-OBB: P 0.8926, R 0.8397, mAP50 0.8705,
+  mAP50-95 0.6524; runtime 82.43 min.
+
+Model-capacity conclusion:
+- Increasing capacity from YOLO11n to s and m improved mAP50 and mAP50-95.
+- YOLO11m is the current strongest completed detector.
+- Clean 162-image reevaluation is required before final reporting.
+
+Non-YOLO diagnostic baselines:
+- CenterNet-OBB: P 0.0636, R 0.1074, F1 0.0799.
+- DETR-OBB-Lite: P 0.0835, R 0.0958, F1 0.0892.
+- These are lightweight diagnostic implementations and must not be presented as
+  faithful state-of-the-art CenterNet or DETR reproductions.
+
+9. METHODS IN THE TRANSLATED DATASET PAPER
+
+The paper compares:
+- O-FCOS
+- PSC
+- O-RTMDet
+- O-ATSS
+- S2A-Net
+- O-FRCNN
+
+Mean performance across the paper's 12 train/test viewing conditions:
+- O-RTMDet: Recall 69.92%, Precision 79.11%, F1 72.82%, mAP50 68.28%.
+- O-FCOS: Recall 69.28%, Precision 72.42%, F1 70.41%, mAP50 66.57%.
+- O-FRCNN: Recall 69.32%, Precision 65.64%, F1 66.69%, mAP50 65.97%.
+- O-ATSS: Recall 67.93%, Precision 74.46%, F1 70.29%, mAP50 65.86%.
+- PSC: Recall 66.19%, Precision 67.43%, F1 66.19%, mAP50 61.88%.
+- S2A-Net: Recall 52.73%, Precision 59.05%, F1 55.08%, mAP50 49.08%.
+
+Paper protocol:
+- MMRotate framework, AdamW, base LR 0.001, weight decay 0.05.
+- Batch size 64 and 100 training steps/epochs as translated.
+- Pretrained backbone initialization.
+- Eight-channel input: interleaved real and imaginary parts of HH/VH/HV/VV.
+- Separate elevation subsets at 40, 45 and 50 degrees plus the combined set.
+- The major published gap is cross-elevation/viewpoint generalization.
+
+10. AUGMENTATION STATUS
+
+Already used:
+- Classification: flips, 90-degree rotations and complex Gaussian noise.
+- YOLO: translation 0.1, scale 0.5, horizontal flip 0.5 and mosaic 1.0.
+
+Not yet completed:
+- A controlled no-augmentation versus augmentation OBB comparison.
+- A separately documented imgaug/Albumentations pipeline that transforms all
+  four OBB corners consistently.
+- SAR-specific amplitude/speckle/noise robustness evaluation.
+
+11. NEXT NOTEBOOKS: AGREED PRACTICAL SCOPE
+
+Notebook A: clean paper-baseline detection experiment
+- Deduplicate to 1,314/162/162 unique images.
+- O-RTMDet first, O-FRCNN second if the MMRotate environment passes a smoke test.
+- Preserve the paper's eight-channel real/imag input where supported.
+- Report train/validation loss, P, R, F1, mAP50 and mAP50-95.
+- Include an environment-failure checkpoint; do not spend the full schedule on
+  incompatible MMRotate builds.
+
+Notebook B: DINOv3 backbone classification
+- DINOv4 is not an identifiable official Meta release as of this audit.
+- Use frozen DINOv3 ViT-S/16 as a feature backbone.
+- Compare with ResNet18 magnitude-only and the clean Complex CNN result.
+- Use train-only normalization and group-aware/K-fold evaluation.
+- Produce confusion matrix and patch-token attention/similarity visualization.
+
+Notebook C: OBB augmentation and modern YOLO comparison
+- Clean unique split only.
+- Compare YOLO11m-OBB without augmentation against the same model with OBB-safe
+  geometric plus SAR-noise augmentation.
+- Compare the winning recipe with YOLO26m-OBB.
+- Plot training and validation losses for each model.
+- Plot a grouped P/R/F1/mAP comparison; do not call it a P-R curve unless
+  confidence-swept precision-recall pairs are actually available.
+
+12. PPT CHANGES REQUESTED BY GUIDE
+
+- Replace prose-heavy classification slides with a compact classification flow,
+  five-fold plot, final confusion matrix and one attention visualization.
+- Show no-normalization versus train-only-standardization K-fold results.
+- Present feature fusion as a module developed for later detector integration.
+- For YOLO11s versus YOLO11m, show training and validation loss by epoch to
+  discuss model capacity.
+- Add a grouped P/R/F1/mAP comparison for the two models.
+- Add one slide comparing our clean protocol with the paper protocol.
+- Correct the current statement that only YOLO11n/s are being trained: the
+  completed 100-epoch models are YOLO11s and YOLO11m.
+- Keep the provisional-test warning until all YOLO models are reevaluated on the
+  deduplicated 162-image test split.
+

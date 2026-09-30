@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# Credentials and local environment
+.env
+.env.*
+*.pem
+*.key
+credentials*
+
+# Datasets and generated caches
+Pol_ISARSpaceTarget1.0/
+TFPSSTD/
+data/
+datasets/
+cache/
+outputs/
+runs/
+*.dat
+*.mat
+*.tif
+*.tiff
+*.npy
+*.npz
+
+# Models and archives
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.zip
+*.tar
+*.tar.gz
+
+# Editor/OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+

@@ -1,0 +1,84 @@
+POL-ISAR PAPER-PARTITION YOLO-OBB: COLAB RUN GUIDE
+=================================================
+
+Purpose
+-------
+This experiment preserves the dataset author's official train/validation/test
+membership, filters it into D40, D45, D50 and Dall, trains four YOLO11s-OBB
+models, and evaluates every model on the three elevation-specific test sets.
+That is 4 training runs and 12 final evaluations.
+
+Files to place in Google Drive
+------------------------------
+1. Put POLISAR_PaperPartition_YOLO_OBB_PACKAGE.zip in:
+   /content/drive/MyDrive/drdo/
+2. Keep the extracted dataset under a folder containing:
+   ImageSets/labelTxt/{train,valid,test}
+   ImageSets/images/{train,valid,test}
+   TIFFImages/AmplitudeImages (optional because DAT is the fallback)
+3. Open POLISAR_PaperPartition_YOLO_OBB.ipynb in Colab.
+
+Colab settings
+--------------
+Select Runtime > Change runtime type > T4 GPU.
+Run cells in order. Do not manually rerun a later training cell before the
+partition audit and dataset-build cells have completed.
+
+Smoke test first
+----------------
+Set SMOKE_TEST = True and run all cells. This uses at most 12 frames per split
+and 2 epochs. It checks paths, annotation conversion, GPU setup and one full
+train/evaluate route without claiming research results.
+
+Full experiment
+---------------
+Set SMOKE_TEST = False, restart the runtime, and run all cells. Full settings:
+YOLO11s-OBB, single-VV magnitude, 100 epochs, image size 640, batch 8,
+seed 42, patience 20 and workers 2.
+
+Required full-data audit counts
+-------------------------------
+D40:  train 438, valid 54, test 54
+D45:  train 438, valid 54, test 54
+D50:  train 438, valid 54, test 54
+Dall: train 1314, valid 162, test 162
+
+The notebook stops if these counts differ, if a basename occurs in more than
+one official split, if Dall is not the exact elevation union, or if a required
+label/VV source is absent. Do not bypass these checks.
+
+RAM and disconnect behavior
+---------------------------
+Images are processed one frame at a time with cache=False. Prepared datasets
+remain in /content and may need rebuilding after a runtime reset. Training
+checkpoints and results are written directly to Drive. A training run is reused
+only when both weights/best.pt and results.csv exist. Reopen the notebook,
+remount Drive and run from the top after a disconnect.
+
+Drive outputs
+-------------
+/content/drive/MyDrive/drdo/paper_partition_yolo_obb/full100/
+  manifests/  partition CSVs, counts and class map
+  runs/       four run folders with best.pt and results.csv
+  plots/      sample OBBs, five metric heatmaps and four loss panels
+  paper_partition_yolo_12_conditions.csv
+  paper_partition_yolo_12_conditions.json
+
+Files to send to the guide
+--------------------------
+1. paper_partition_yolo_12_conditions.csv
+2. plots/cross_elevation_metric_heatmaps.png
+3. plots/four_model_train_validation_losses.png
+4. plots/partition_samples_with_obb.png
+5. manifests/partition_summary.json and the displayed count table
+
+Interpretation rules
+--------------------
+Use best.pt selected by validation data. Test metrics are for final reporting,
+never checkpoint selection. Compare the three same-elevation diagonal results
+with off-diagonal results, then compare Dall with each elevation-specific model.
+Report mAP50-95 as the stricter localization metric and include precision,
+recall, F1 and mAP50.
+
+This is a controlled YOLO single-VV experiment under the paper's partition
+protocol. It is not a reproduction of the paper's eight-channel MMRotate setup.

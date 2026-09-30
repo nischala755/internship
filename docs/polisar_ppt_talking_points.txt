@@ -1,0 +1,49 @@
+Pol-ISAR DRDO Progress Review - Talking Points
+
+Recommended format:
+Use Overleaf Beamer if the guide specifically asked for Overleaf. It will produce a PDF presentation, not a PowerPoint .pptx file. Use Google Slides only if she wants a more visual editable deck.
+
+Problem Statement:
+Develop and evaluate learning-based methods for polarimetric ISAR space-target fine recognition and component-level oriented object detection using magnitude, phase and polarimetric fusion information.
+
+Dataset:
+Pol-ISARSpaceTarget-1.0.
+The paper reports 6 satellite targets, 1638 polarimetric ISAR frames, 13104 complex DAT files, 1638 annotation files and 16577 component-level oriented box instances.
+Working split used in our experiments: 1314 train, 162 validation and 174 test annotation images.
+Polarimetric channels: HH, HV, VH and VV.
+Object classes: 9 component classes.
+
+Methods Completed:
+1. Classification:
+Magnitude-only, phase-only and magnitude-phase combined studies.
+Complex CNN and ResNet18 magnitude-only baseline.
+Normalization studies using no normalization, train-only statistics, standard normalization and -1 to 1 scaling.
+Feature-selection studies using statistical and attention-based methods.
+
+2. Object Detection:
+DOTA-style labels converted to YOLO-OBB format.
+YOLO11n-OBB trained on single VV, Pauli fusion and learned fusion inputs.
+Best completed detection result: single VV input with precision 0.804, recall 0.819, mAP@50 0.821 and mAP@50:95 0.582.
+
+3. Non-YOLO Checks:
+CenterNet-OBB and DETR-OBB-Lite were tested as diagnostic baselines, but performance was weak compared with YOLO.
+MMRotate methods to be run later in Python 3.10: Rotated RetinaNet, Rotated Faster R-CNN, RoI Transformer and Oriented R-CNN.
+
+Current Experiment:
+YOLO-only long-epoch run.
+Models: YOLO11n-OBB and YOLO11s-OBB.
+Input: single VV.
+Epochs: 100 maximum.
+Patience: 25.
+Checkpoint: saved every epoch and resume enabled.
+
+Future Work:
+1. Complete 100-epoch YOLO11n/YOLO11s comparison and analyze curves.
+2. Add image augmentation using imgaug or an equivalent library.
+3. Translate the Chinese paper fully and identify author models, benchmark setup and gaps.
+4. Run SOTA non-YOLO OBB detectors using MMRotate in Python 3.10.
+5. Propose a novel detection-aware polarimetric fusion model using HH, HV, VH and VV complex information.
+
+How to avoid sounding AI-generated:
+Do not read the slides line by line.
+Use the slides as checkpoints and explain what you personally observed: suspicious high classification accuracy, normalization corrections, YOLO performing best, non-YOLO baselines underperforming, and the need for proper SOTA comparison plus augmentation.

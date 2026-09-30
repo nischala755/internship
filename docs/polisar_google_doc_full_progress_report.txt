@@ -1,0 +1,711 @@
+DRDO Progress Document: Polarimetric ISAR Space Target Recognition and Detection
+
+Student: Nischala G. S.
+Project Area: Polarimetric ISAR image analysis for space target fine recognition and component-level detection
+
+1. Purpose of This Document
+
+This document summarizes the complete work carried out so far on the Pol-ISARSpaceTarget-1.0 and TFPSSTD ISAR datasets. It is meant to serve as a Google Docs progress report that can be shared with the guide and later converted into a presentation or paper outline.
+
+The work has evolved in stages:
+
+1. Understanding ISAR image formation and polarimetric ISAR data.
+2. Studying magnitude and phase feature extraction.
+3. Building classification baselines using Complex CNN, ResNet18 and feature-based classifiers.
+4. Checking normalization and data leakage issues.
+5. Extending the work to object/component detection using oriented bounding boxes.
+6. Comparing single-polarization, Pauli-fusion and learned-fusion representations.
+7. Starting long-epoch YOLO-OBB training and planning augmentation, translation of the Chinese paper and novel method development.
+
+2. Problem Statement
+
+The main problem is fine recognition of space targets from polarimetric ISAR images. Since satellite ISAR images contain structure-sensitive scattering information, the objective is not only to classify the target but also to identify and localize important components such as body parts, antennas, solar arrays, fittings and optical lenses.
+
+The working problem statement is:
+
+To develop and evaluate robust learning-based methods for polarimetric ISAR space target fine recognition and component-level oriented object detection by using magnitude, phase and full-polarimetric fusion information from HH, HV, VH and VV channels.
+
+3. Dataset 1: Pol-ISARSpaceTarget-1.0
+
+The primary dataset used is Pol-ISARSpaceTarget-1.0: Polarimetric ISAR Electromagnetic Simulation Dataset for Space Target Fine Recognition.
+
+Important facts from the dataset paper:
+
+1. The dataset contains 6 types of satellite targets.
+2. It contains 1638 polarimetric ISAR image frames.
+3. It provides full-polarimetric channels: HH, HV, VH and VV.
+4. It contains 13104 complex DAT files.
+5. It contains 1638 annotation files.
+6. It provides 16577 component-level oriented bounding box annotation instances.
+7. The image size after processing is 256 x 256.
+8. The dataset provides both DOTA-style TXT labels and PASCAL VOC-style XML labels.
+
+The working split observed and used in experiments:
+
+Train: 1314 annotation images
+Validation: 162 annotation images
+Test: 174 annotation images
+
+The 9 component-level object classes are:
+
+1. cuboid_body
+2. optical_lens
+3. panel_antenna
+4. parabolic_antenna
+5. plate_body
+6. plate_fitting
+7. polygon_body
+8. rod_fitting
+9. solar_array
+
+4. Dataset Structure Verified
+
+The dataset folder contains:
+
+1. Annotations
+2. TIFFImages
+3. ImageSets
+4. Tools
+
+Important subfolders:
+
+ImageSets/images/train, valid, test:
+Complex DAT files for HH, HV, VH and VV channels.
+
+ImageSets/labelTxt/train, valid, test:
+DOTA-style oriented bounding box labels.
+
+TIFFImages/AmplitudeImages:
+Amplitude TIFF images for each polarization.
+
+TIFFImages/PauliImages:
+Provided Pauli pseudo-colour images.
+
+Tools:
+Python and MATLAB read scripts for the complex DAT data.
+
+5. Initial Study Topics
+
+The first stage focused on understanding the radar and polarimetric background:
+
+1. ISAR image formation
+2. Magnitude-based feature extraction
+3. Phase-based feature extraction
+4. Polarimetric ISAR interpretation
+5. Robust ISAR classification via feature fusion
+6. Difference between real-valued CNN and complex-valued CNN
+
+Separate notes were prepared for these topics during the initial study phase.
+
+6. Classification Work Completed
+
+The initial classification objective was to classify the satellite target using polarimetric ISAR data.
+
+Main classification methods studied:
+
+1. Magnitude-only features
+2. Phase-only features
+3. Magnitude + phase feature fusion
+4. Complex CNN
+5. ResNet18 magnitude-only baseline
+6. Statistical feature classifiers
+7. Feature selection using statistical and attention-based methods
+
+7. Complex CNN Classification
+
+A Complex CNN was implemented to process complex-valued polarimetric data. The idea was to preserve both real and imaginary information rather than discarding phase by using magnitude-only images.
+
+Core principle:
+
+For a complex input x = a + jb and complex convolution weights W = Wr + jWi, the complex convolution is:
+
+Real output = Wr(a) - Wi(b)
+Imaginary output = Wr(b) + Wi(a)
+
+The implemented architecture included:
+
+1. Complex convolution layers
+2. Complex batch normalization
+3. Complex activation
+4. Residual blocks
+5. Feature extraction from higher layers
+6. Final classification head
+
+After guide feedback, unnecessary object-detection heads were removed from the classification notebook because the classification task only required class prediction and feature extraction from a fully connected layer.
+
+8. Magnitude and Phase Feature Extraction
+
+For each full-polarimetric image, features were extracted from:
+
+HH, HV, VH and VV
+
+Magnitude:
+Magnitude = sqrt(real^2 + imaginary^2)
+
+Phase:
+Phase = atan2(imaginary, real)
+
+The feature vector was formed using:
+
+[mag_HH, mag_HV, mag_VH, mag_VV, phase_HH, phase_HV, phase_VH, phase_VV]
+
+In one feature study, each channel was resized/downsampled to 64 x 64 before flattening. Therefore, each image was represented using 32768 feature values.
+
+Feature matrices created:
+
+Train: 1314 x 32768
+Validation: 162 x 32768
+Test: 162 x 32768 in that specific notebook run
+
+9. Magnitude and Phase Range Check
+
+Before normalization, magnitude and phase ranges were checked.
+
+Observed sampled range:
+
+Magnitude minimum: 2.4063e-05
+Magnitude maximum: 311.7235
+Phase minimum: -3.14159 radians
+Phase maximum: 3.14159 radians
+
+Observation:
+
+Phase was within the expected range of approximately -pi to +pi. Magnitude had a much wider dynamic range, so different normalization strategies were tested.
+
+10. Normalization and Leakage Correction
+
+The guide specifically raised concern about normalization and possible data leakage.
+
+Correction made:
+
+All normalization statistics were computed only from the training data. The same training statistics were then applied to validation and test data.
+
+Statistics computed from the training matrix:
+
+1. Mean
+2. Variance
+3. Standard deviation
+4. Minimum
+5. Maximum
+6. Median
+7. Interquartile range
+8. Maximum absolute value
+
+Normalization methods tested:
+
+1. Raw / no normalization
+2. Standard z-score normalization
+3. Min-max 0 to 1 normalization
+4. Min-max -1 to 1 normalization
+5. Robust IQR normalization
+6. Max-absolute normalization
+
+Feature-classifier results from one experiment:
+
+Raw:
+Validation accuracy: 1.0000
+Test accuracy: 1.0000
+
+Standard z-score:
+Validation accuracy: 0.9938
+Test accuracy: 0.9938
+
+Min-max 0 to 1:
+Validation accuracy: 0.9938
+Test accuracy: 1.0000
+
+Min-max -1 to 1:
+Validation accuracy: 0.9877
+Test accuracy: 0.9938
+
+Robust IQR:
+Validation accuracy: 0.9938
+Test accuracy: 1.0000
+
+Max-absolute:
+Validation accuracy: 0.9136
+Test accuracy: 0.9630
+
+Interpretation:
+
+The extracted magnitude + phase feature matrix appears highly separable under the official split. Since even raw features produced very high accuracy, these results were treated cautiously. The high values may indicate that the official split is easy or that samples are strongly class-separable by target/view conditions. Therefore, stronger validation is needed before claiming robust generalization.
+
+11. ResNet18 Magnitude-Only Baseline
+
+A ResNet18 magnitude-only baseline was implemented to compare normal CNN behavior against complex/polarimetric feature approaches.
+
+Setup:
+
+1. Input: 4-channel magnitude only
+2. No phase used
+3. No complex-valued arithmetic
+4. First ResNet18 convolution modified for 4-channel input
+5. Magnitude mean and standard deviation computed from training data only
+6. Same statistics applied to validation and test
+7. Training augmentation applied only to the training set
+
+Observed result from one run:
+
+Test accuracy: 0.4136
+Test macro-F1: 0.3805
+
+Interpretation:
+
+The ResNet18 model showed weak generalization in that run. This suggests that a normal CNN on magnitude-only data is not automatically sufficient. However, the result should be treated as an initial baseline and should be repeated using best-validation checkpoint selection and improved regularization.
+
+12. Feature Selection Work
+
+Feature selection was added after guide feedback.
+
+Methods included:
+
+1. Statistical feature selection
+2. ANOVA-F based feature selection
+3. Attention-based feature selection
+
+Purpose:
+
+To identify whether all extracted magnitude/phase features are required or whether a reduced feature subset can preserve classification performance.
+
+Important interpretation:
+
+Because some feature-classifier results already reached near-perfect performance, feature selection is not necessarily required for improving accuracy on the official split. Its value is more in interpretability, dimensionality reduction and robustness checks.
+
+13. Dataset 2: TFPSSTD ISAR Dataset
+
+The second dataset studied was the TFPSSTD dataset from IEEE DataPort.
+
+Dataset classes:
+
+1. Satellite I
+2. Satellite II
+3. Satellite III
+
+Files downloaded:
+
+Satellite I, Satellite II and Satellite III ZIP files were downloaded/extracted.
+
+Observed files:
+
+393 MAT files
+Total extracted MAT size approximately 14.6 GB
+
+Each MAT file contains full-polarimetric complex ISAR images.
+
+Important fields observed:
+
+1. ISAR_FullPol_DualADMM
+2. ISAR_FullPol_PFA
+3. para metadata containing range, crossrange, fc and B
+
+Input chosen:
+
+ISAR_FullPol_DualADMM was selected as the main input for the first classification experiment because the dataset description mentions the low-sidelobe Dual-ADMM imaging method.
+
+14. TFPSSTD RAM-Safe Pipeline
+
+The TFPSSTD dataset caused Colab RAM issues due to large MAT files.
+
+RAM-safe corrections:
+
+1. Load one MAT file at a time.
+2. Use only the required ISAR field.
+3. Convert complex128 to complex64.
+4. Convert shape from 601 x 601 x 4 to 4 x 601 x 601.
+5. Resize CNN input to 128 x 128.
+6. Use small batch size.
+7. Avoid loading all files into memory at once.
+
+15. TFPSSTD Classification Pipeline
+
+Implemented components:
+
+1. View-disjoint train/test split using AccAngle and StaAngle.
+2. Magnitude and phase vector extraction.
+3. RCS-like feature computation.
+4. Train-only normalization statistics.
+5. Classifiers: SGD logistic classifier, Linear SVM and Random Forest.
+6. Feature selection using ANOVA-F.
+7. ResNet18 magnitude-only image classifier.
+8. Complex-input CNN using 8 channels: real and imaginary parts of HH, HV, VH and VV.
+
+Important note:
+
+Weights trained on the Pol-ISARSpaceTarget dataset were not reused for TFPSSTD because the datasets differ in target type, acquisition/imaging setup and file format.
+
+16. RCS Feature Work
+
+The guide asked to compute RCS from ISAR images.
+
+Implemented idea:
+
+RCS-like features were computed from the ISAR magnitude/scattering intensity.
+
+The purpose was to summarize target scattering energy and compare whether physically meaningful radar features support classification.
+
+Possible RCS-like statistics:
+
+1. Total scattering energy
+2. Mean intensity
+3. Peak intensity
+4. Channel-wise energy
+5. Polarimetric ratios
+6. Energy distribution across range/cross-range regions
+
+17. Object Detection Motivation
+
+The guide pointed out that the Pol-ISARSpaceTarget dataset contains object detection labels. Therefore, the work was extended from classification to component-level object detection.
+
+Reason:
+
+The dataset provides oriented bounding boxes for components. Therefore, object detection is more aligned with the annotation richness of the dataset than only image-level classification.
+
+Detection task:
+
+Localize and classify satellite components in ISAR images using oriented bounding boxes.
+
+18. YOLO-OBB Detection Pipeline
+
+The DOTA-style labels were converted into Ultralytics YOLO-OBB format.
+
+Original DOTA-style format:
+
+x1 y1 x2 y2 x3 y3 x4 y4 class difficult
+
+YOLO-OBB format:
+
+class x1 y1 x2 y2 x3 y3 x4 y4
+
+The coordinates were normalized to the 0 to 1 range.
+
+19. Detection Inputs Compared
+
+Three input representations were compared:
+
+1. Single-VV baseline
+
+Input:
+VV amplitude image.
+
+Reason:
+VV is a standard single-polarization baseline and performed strongly.
+
+2. Fixed Pauli fusion
+
+Input generated from full-polarimetric channels:
+
+R = |HH - VV|
+G = |HV + VH|
+B = |HH + VV|
+
+Reason:
+Pauli decomposition is physically meaningful and uses polarimetric information.
+
+3. Learned fusion
+
+Input:
+HH, HV, VH and VV complex data represented as real and imaginary channels.
+
+Method:
+A small learnable fusion stem mapped 8 input channels to a 3-channel image, which was then used by YOLO-OBB.
+
+20. Completed YOLO-OBB Results
+
+The main completed object detection results were:
+
+Single VV + YOLO11n-OBB:
+Precision: 0.804
+Recall: 0.819
+mAP50: 0.821
+mAP50-95: 0.582
+
+Pauli Fusion + YOLO11n-OBB:
+Precision: 0.828
+Recall: 0.739
+mAP50: 0.783
+mAP50-95: 0.573
+
+Learned Fusion + YOLO11n-OBB:
+Precision: 0.770
+Recall: 0.683
+mAP50: 0.743
+mAP50-95: 0.518
+
+Interpretation:
+
+Single VV produced the strongest overall mAP. Pauli fusion improved precision but reduced recall and mAP. The first learned-fusion attempt did not improve performance, suggesting that simple image-level learned fusion is insufficient.
+
+21. Non-YOLO OBB Experiments
+
+The guide asked to try methods apart from YOLO.
+
+Two pure PyTorch diagnostic baselines were implemented:
+
+1. CenterNet-OBB
+2. DETR-OBB-Lite
+
+Observed results:
+
+CenterNet-OBB:
+Precision: 0.0636
+Recall: 0.1074
+F1 score: 0.0799
+
+DETR-OBB-Lite:
+Precision: 0.0835
+Recall: 0.0958
+F1 score: 0.0892
+
+Interpretation:
+
+These simple baselines performed poorly compared with YOLO-OBB. They are useful only as diagnostic non-YOLO baselines, not as final methods.
+
+22. MMRotate / SOTA OBB Methods Considered
+
+The following stronger non-YOLO OBB methods were identified:
+
+1. Rotated RetinaNet
+2. Rotated Faster R-CNN
+3. RoI Transformer
+4. Oriented R-CNN
+
+Issue:
+
+These methods are commonly available through MMRotate/OpenMMLab. The Colab Python 3.12 environment caused dependency failures with mmcv/mmrotate. Therefore, these methods should be run in a Python 3.10 conda environment or a compatible cloud runtime.
+
+23. Long-Epoch YOLO Work
+
+After guide feedback, the YOLO-OBB training was updated to increase the number of epochs.
+
+Current long-run setup:
+
+Models:
+1. YOLO11n-OBB
+2. YOLO11s-OBB
+
+Input:
+single_vv
+
+Training:
+Maximum epochs: 100
+Early stopping patience: 25
+Checkpoint save period: every epoch
+Resume support: enabled from last.pt
+
+Reason:
+
+Earlier YOLO runs gave the best performance, so the current priority is to strengthen the YOLO baseline with longer training and proper checkpoint recovery before adding further complexity.
+
+24. Runtime and Colab Issues
+
+Issues faced:
+
+1. Colab runtime disconnections during long training.
+2. Google Drive mount errors when /content/drive already contained files.
+3. RAM crashes while working with TFPSSTD MAT files.
+4. MMRotate installation failure in Python 3.12.
+
+Corrections made:
+
+1. Added alternate Drive mount logic using /content/gdrive.
+2. Added dataset-root validation before training.
+3. Built RAM-safe TFPSSTD loading.
+4. Added checkpoint save and resume for long YOLO runs.
+5. Reduced default long-run scope to single_vv first.
+
+25. Current Best Technical Finding
+
+The strongest completed detection result so far is:
+
+YOLO11n-OBB on single VV amplitude images:
+Precision: 0.804
+Recall: 0.819
+mAP50: 0.821
+mAP50-95: 0.582
+
+This indicates that a simple single-polarization representation is a strong baseline for the current dataset split.
+
+Important research implication:
+
+Using full polarimetric information does not automatically improve detection. The polarimetric fusion method must be designed carefully and optimized directly for the detection task.
+
+26. Key Corrections Based on Guide Feedback
+
+Guide concern: The classification accuracy was too high and suspicious.
+
+Action taken:
+Accuracy was treated cautiously. Data split, normalization and leakage issues were reviewed.
+
+Guide concern: Normalization may cause leakage.
+
+Action taken:
+Normalization statistics were computed only from training data and applied unchanged to validation/test.
+
+Guide concern: Classification notebook was unnecessarily complicated.
+
+Action taken:
+Detection/objectness heads were removed from the classification setup.
+
+Guide concern: Use detection labels available in the dataset.
+
+Action taken:
+The project was extended to oriented object detection.
+
+Guide concern: Try other object detection methods.
+
+Action taken:
+YOLO variants were compared, non-YOLO diagnostic baselines were tested, and MMRotate SOTA methods were identified for a compatible environment.
+
+Guide concern: Increase number of epochs.
+
+Action taken:
+YOLO11n-OBB and YOLO11s-OBB long-run notebook was prepared with 100 maximum epochs, patience 25 and resume support.
+
+27. Notebooks Prepared So Far
+
+1. POLISAR_ComplexCNN_Classification_CLEAN.ipynb
+
+Purpose:
+Clean classification notebook using Complex CNN and classification-only setup.
+
+2. POLISAR_Feature_Normalization_ResNet18_Study.ipynb
+
+Purpose:
+Magnitude/phase feature extraction, normalization comparison, train-only statistics, feature selection and ResNet18 magnitude-only baseline.
+
+3. TFPSSTD_New_Dataset_Colab_Pipeline_RAM_SAFE.ipynb
+
+Purpose:
+RAM-safe TFPSSTD dataset inspection and preprocessing.
+
+4. TFPSSTD_Classification_RAM_SAFE.ipynb
+
+Purpose:
+Classification pipeline for TFPSSTD with feature-based classifiers, ResNet18 and complex-input CNN.
+
+5. POLISAR_OBB_Detection_PauliFusion_YOLO.ipynb
+
+Purpose:
+YOLO-OBB detection using single VV and Pauli-fusion inputs.
+
+6. POLISAR_OBB_LearnableFusion_YOLO_Comparison.ipynb
+
+Purpose:
+Learnable polarimetric image fusion followed by YOLO-OBB detection.
+
+7. POLISAR_OBB_Methods_Comparison.ipynb
+
+Purpose:
+YOLO-family OBB method comparison.
+
+8. POLISAR_NonYOLO_OBB_PureTorch_Comparison.ipynb
+
+Purpose:
+CenterNet-OBB and DETR-OBB-Lite non-YOLO diagnostic baselines.
+
+9. POLISAR_YOLO_OBB_LongEpoch_Comparison.ipynb
+
+Purpose:
+Long-epoch YOLO11n/YOLO11s OBB comparison with checkpoint resume.
+
+28. Chinese Paper Study
+
+The Chinese paper attached is the Pol-ISARSpaceTarget-1.0 dataset paper from Journal of Signal Processing.
+
+Key points extracted so far:
+
+1. The paper introduces Pol-ISARSpaceTarget-1.0 as a public polarimetric ISAR dataset for space target fine recognition.
+2. The dataset contains 6 satellite targets and 9 component categories.
+3. The data was generated through electromagnetic simulation and ISAR imaging.
+4. The authors provide full-polarimetric complex data, amplitude images, Pauli images and component annotations.
+5. The paper includes dataset construction, electromagnetic simulation, imaging processing, annotation workflow and baseline recognition experiments.
+
+Next step:
+
+Translate the full paper section-wise into English and identify:
+
+1. Models used by the authors.
+2. Dataset split protocol.
+3. Baseline metrics.
+4. Limitations of their work.
+5. Research gap for our paper.
+
+29. Proposed Novel Method Direction
+
+The main gap observed from experiments is:
+
+Simple polarimetric image fusion does not outperform the single VV YOLO-OBB baseline. Therefore, a stronger method should perform detection-aware polarimetric fusion inside the model rather than generating a fixed fused image before detection.
+
+Proposed method idea:
+
+Detection-Aware Polarimetric Fusion YOLO-OBB
+
+Core idea:
+
+1. Use HH, HV, VH and VV complex inputs.
+2. Represent each channel using magnitude, phase or real/imaginary components.
+3. Use separate shallow branches for co-pol and cross-pol information.
+4. Apply channel attention and spatial attention to learn which polarization channels help each component.
+5. Fuse features inside the detector backbone.
+6. Train the full model using oriented detection loss.
+
+Expected contribution:
+
+Instead of using fixed Pauli fusion or image-level learned fusion, the proposed method lets the detector learn polarimetric importance directly for component localization and classification.
+
+30. Planned Augmentation Work
+
+The guide asked to apply augmentation using imgaug or a similar library.
+
+Planned augmentation:
+
+1. Small rotation
+2. Horizontal/vertical flip where physically valid
+3. Translation
+4. Scaling
+5. Gaussian noise
+6. Speckle-like noise
+7. Contrast variation
+
+Important condition:
+
+For object detection, augmentation must transform the oriented bounding boxes along with the image. Therefore, the augmentation library must support keypoints/polygons or bounding box coordinate transformation.
+
+31. Immediate Next Steps
+
+1. Complete long-epoch YOLO11n-OBB and YOLO11s-OBB training.
+2. Save and compare training curves, validation curves and test metrics.
+3. Add augmentation carefully for OBB detection.
+4. Translate the Chinese paper fully.
+5. Extract author-used models and benchmark results.
+6. Run or reproduce those models if feasible.
+7. Develop the detection-aware polarimetric fusion model.
+8. Write paper sections:
+   Introduction
+   Related work
+   Dataset and preprocessing
+   Methodology
+   Experiments
+   Results
+   Ablation study
+   Conclusion
+
+32. Suggested Positioning for Paper
+
+Possible paper title:
+
+Detection-Aware Polarimetric Feature Fusion for Component-Level Recognition in ISAR Space Target Images
+
+Possible contributions:
+
+1. A systematic study of magnitude, phase and polarimetric fusion representations for ISAR space target recognition.
+2. A strong YOLO-OBB baseline for component-level detection on Pol-ISARSpaceTarget-1.0.
+3. A comparison of single-polarization, Pauli-fusion and learned-fusion inputs.
+4. A proposed detection-aware polarimetric fusion architecture.
+5. Robustness and ablation analysis using normalization, augmentation, view-based splits and cross-dataset testing.
+
+33. Conclusion
+
+The work so far has moved from basic ISAR/polarimetric understanding to classification, feature analysis, normalization correction, cross-dataset study and object detection. The best completed detection result is currently from YOLO11n-OBB using single VV amplitude images. The main research gap is that polarimetric fusion must be made detection-aware to improve over the strong single-polarization baseline.
+
+The next stage should focus on long-epoch YOLO comparison, augmentation, full translation of the Chinese paper and development of a novel polarimetric fusion detector.

@@ -1,0 +1,196 @@
+Project: Robust ISAR Space Target Recognition and Component Detection using Polarimetric Feature Fusion
+
+Immediate guide feedback:
+1. Carry out object detection on the previous Pol-ISARSpaceTarget dataset.
+2. Use a new/novel method not already used by the dataset author.
+3. Translate and study the Chinese paper associated with the TFPSSTD dataset.
+4. Prepare findings, research gaps, and a Q1-journal paper direction.
+
+============================================================
+1. OBJECT DETECTION ON POL-ISARSpaceTarget-1.0
+============================================================
+
+Dataset status:
+- The previous dataset contains object/component annotations.
+- Annotation format includes rotated bounding boxes.
+- Example annotation type: robndbox.
+- DOTA-style labelTxt files are also available:
+  x1 y1 x2 y2 x3 y3 x4 y4 class difficult
+
+Therefore, this is not only a classification dataset. It can be used for oriented object detection of satellite components.
+
+Detected component classes include examples such as:
+- parabolic_antenna
+- solar_array
+- plate_fitting
+- polygon_body
+- rod_fitting
+
+Proposed detection baseline:
+- YOLO-OBB on single-polarization VV amplitude images.
+
+Proposed novel method:
+- Polarimetric Pauli-Fusion YOLO-OBB.
+- Construct a 3-channel image from full-pol complex channels:
+  R = |HH - VV|
+  G = |HV + VH|
+  B = |HH + VV|
+- Train an oriented object detector on this fused polarimetric representation.
+- Compare with the single-pol baseline.
+
+Why this can be presented as a novelty:
+- Standard object detection models usually treat the radar image as a normal image.
+- The proposed method injects radar polarimetric scattering information into the detector input.
+- Oriented bounding boxes are better suited than axis-aligned boxes for ISAR satellite components.
+- This gives both detection and polarimetric interpretation value.
+
+Experiments to run:
+1. Single-pol VV YOLO-OBB baseline.
+2. Pauli-fusion YOLO-OBB proposed method.
+3. Optional: HH/HV/VH/VV separate single-pol ablation.
+4. Optional: Pauli-fusion + small attention block if we later move beyond Ultralytics.
+5. Optional: compare YOLO-OBB with transformer-based detection, if time permits.
+
+Metrics:
+- mAP50
+- mAP50-95
+- precision
+- recall
+- per-class AP
+- confusion matrix if available
+- inference time
+
+Output notebook:
+- POLISAR_OBB_Detection_PauliFusion_YOLO.ipynb
+
+============================================================
+2. CHINESE PAPER TRANSLATION AND GAP ANALYSIS
+============================================================
+
+Task:
+Translate the Chinese paper written by the TFPSSTD dataset authors into English, then extract:
+1. Dataset construction method.
+2. Imaging method.
+3. Calibration method.
+4. Polarimetric interpretation.
+5. Classification/detection experiments already performed.
+6. Limitations and research gaps.
+
+Required from user:
+- Download/provide the Chinese paper PDF.
+- If the PDF is scanned, OCR may be required before translation.
+
+Translation workflow:
+1. Extract PDF text page by page.
+2. Translate each section into English.
+3. Preserve equations, figures, tables, and technical terms.
+4. Prepare a section-wise summary.
+5. Prepare a gap table:
+   - What the authors did.
+   - What they did not do.
+   - How our work extends it.
+
+Expected gap directions:
+- If the paper mainly focuses on dataset construction and imaging:
+  Gap: limited deep-learning benchmark on detection/classification.
+- If the paper only performs classification:
+  Gap: component-level oriented detection is not explored.
+- If the paper uses only amplitude:
+  Gap: phase and polarimetric fusion are underused.
+- If the paper does not test cross-dataset generalization:
+  Gap: transfer/generalization between Pol-ISARSpaceTarget and TFPSSTD remains open.
+- If the paper does not use modern OBB detectors:
+  Gap: no oriented object detection benchmark on polarimetric ISAR.
+
+============================================================
+3. Q1 JOURNAL PAPER DIRECTION
+============================================================
+
+Tentative title:
+Polarimetric Feature Fusion and Oriented Component Detection for Robust ISAR Space Target Recognition
+
+Possible Q1 contribution structure:
+
+Contribution 1:
+Dataset-level analysis of Pol-ISARSpaceTarget and TFPSSTD full-polarimetric ISAR data.
+
+Contribution 2:
+Magnitude, phase, and RCS-based feature analysis with train-only normalization.
+
+Contribution 3:
+Classification comparison using statistical classifiers, ResNet18, and complex-input CNN.
+
+Contribution 4:
+Novel polarimetric Pauli-fusion oriented object detection for satellite components.
+
+Contribution 5:
+Cross-dataset discussion:
+- Pol-ISARSpaceTarget and TFPSSTD are different domains.
+- Direct reuse of weights is not scientifically valid without adaptation.
+- Domain adaptation/generalization can be proposed as future work or a later experiment.
+
+Paper outline:
+1. Introduction
+2. Related Work
+   - ISAR image formation
+   - Polarimetric ISAR recognition
+   - Deep learning for SAR/ISAR
+   - Oriented object detection
+3. Dataset Description
+   - Pol-ISARSpaceTarget
+   - TFPSSTD
+4. Proposed Method
+   - Feature extraction
+   - Normalization protocol
+   - Classification models
+   - Polarimetric Pauli-fusion OBB detector
+5. Experiments
+   - Dataset split and leakage checks
+   - Feature normalization comparison
+   - Classification results
+   - Object detection results
+   - Ablation studies
+6. Results and Discussion
+7. Limitations
+8. Conclusion
+
+Potential Q1 journals to shortlist:
+- IEEE Transactions on Geoscience and Remote Sensing
+- IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing
+- ISPRS Journal of Photogrammetry and Remote Sensing
+- Remote Sensing
+- IEEE Geoscience and Remote Sensing Letters
+- Signal Processing
+- Pattern Recognition Letters
+
+Most realistic target:
+- Start with Remote Sensing or IEEE JSTARS if results are solid.
+- Aim for TGRS only if novelty and experiments become very strong.
+
+============================================================
+4. NEXT EXECUTION STEPS
+============================================================
+
+Step 1:
+Run POLISAR_OBB_Detection_PauliFusion_YOLO.ipynb.
+
+Step 2:
+Generate baseline and proposed detection metrics.
+
+Step 3:
+Download/provide the Chinese paper PDF.
+
+Step 4:
+Translate and prepare section-wise findings.
+
+Step 5:
+Prepare a research gap table.
+
+Step 6:
+Start paper drafting with:
+- abstract
+- introduction
+- related work matrix
+- methods diagram
+- experiments table
+

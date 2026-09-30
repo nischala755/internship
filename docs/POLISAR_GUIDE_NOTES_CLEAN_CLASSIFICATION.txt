@@ -1,0 +1,331 @@
+﻿# Pol-ISARSpaceTarget-1.0 Clean Classification Notebook Notes
+
+Notebook reviewed: `POLISAR_ComplexCNN_Classification_CLEAN.ipynb`
+
+## 1. Current Objective
+
+The current notebook is a clean classification-only baseline for the Pol-ISARSpaceTarget-1.0 dataset. It avoids the earlier unnecessary detection/objectness components and focuses only on target class recognition.
+
+Target classes:
+
+- Capella
+- HISEA1
+- QPSSAR
+- Radarsat2
+- StarLink
+- Worldview4
+
+## 2. Dataset Reading
+
+The notebook reads the original `.dat` files using the same layout as the dataset author's `Tools/DataReadPython.py`.
+
+Each sample is reconstructed from four polarimetric complex channels:
+
+- `HH`
+- `HV`
+- `VH`
+- `VV`
+
+Each `.dat` file stores interleaved float32 real and imaginary values:
+
+- even indices: real part
+- odd indices: imaginary part
+
+Each channel is reshaped to `256 x 256`. The four channels are arranged as a full-polarimetric matrix:
+
+[HH HV
+ VH VV]
+
+The model input is then stacked as:
+
+[HH, HV, VH, VV]
+
+Final input tensor shape:
+
+[4, 256, 256], complex64
+
+## 3. Preprocessing / Normalization Used
+
+No augmentation is applied to validation or test data. Training augmentation is optional and controlled separately.
+
+The notebook uses the original image size, `256 x 256`, by default.
+
+The earlier per-sample max-amplitude normalization has been removed because it allowed each validation/test sample to determine its own scaling.
+
+The corrected notebook now follows this rule:
+
+- compute real/imag mean and standard deviation from training data only
+- apply the same training mean/std to train, validation, and test
+- validation/test statistics are never used for normalization
+- set `use_train_standardization = False` to run a fully raw no-normalization experiment
+
+For the complex tensor, real and imaginary parts are standardized separately:
+
+real = (real - train_real_mean) / train_real_std
+imag = (imag - train_imag_mean) / train_imag_std
+
+Magnitude and phase features are then extracted from this standardized complex input. The previous per-sample magnitude max normalization has also been removed.
+
+## 4. Model Architecture
+
+The notebook uses a simple Complex CNN classifier.
+
+Main components:
+
+- Complex convolution layer
+- Complex batch normalization
+- Complex ModReLU activation
+- Complex residual blocks
+- Fully connected complex feature layer
+- Magnitude-phase feature branch
+- Final classification layer
+
+Complex convolution follows:
+
+(a + jb)(c + jd) = (ac - bd) + j(ad + bc)
+
+The Complex CNN feature vector is tapped from:
+
+fc_complex
+
+Magnitude and phase are also extracted, normalized, and passed through a small feature branch.
+
+Final fused feature:
+
+fused_features = concat(complex_fc_features, mag_phase_features)
+
+The fused feature is passed to a softmax classifier.
+
+## 5. Training Setup
+
+The training setup is intentionally simple:
+
+- Loss: plain cross-entropy loss
+- Optimizer: Adam
+- Learning rate: `3e-4`
+- Learning-rate candidates added for verification: `1e-4`, `3e-4`, `1e-3`
+- Batch size: `8`
+- Epochs: `25`
+- Early stopping patience: `8`
+- AMP/mixed precision: disabled
+- Device used in completed run: Tesla T4 GPU
+- Training augmentation is now enabled for the training set only
+- Normalization: training-set mean/std only, applied to all splits
+
+The notebook saves:
+
+- best checkpoint
+- last checkpoint
+- training history JSON
+- test predictions
+- confusion matrix
+
+## 5A. Corrected Experimental Protocol Added After Guide Feedback
+
+The guide correctly pointed out that accuracy of `1.0` does not mean the model is perfect. It may indicate issues with data split, leakage, or an overly easy learning problem.
+
+The guide also pointed out that normalization must not be computed using validation/test samples. This has been corrected.
+
+The notebook has therefore been reordered into a cleaner research protocol:
+
+1. Dataset reading and audit
+2. Compute normalization statistics from training data only
+3. Apply the same train statistics to train, validation, and test
+4. Magnitude/phase feature extraction
+5. Complex CNN definition
+6. Learning-rate sweep
+7. Augmentation check
+8. Stratified K-fold validation
+9. Select final settings
+10. Final train on train + valid
+11. Final test once on untouched test split
+
+This means the final model is not trained first and justified later. The verification steps come before the final training/test claim.
+
+The three verification steps are:
+
+1. Learning-rate tuning
+
+The notebook now includes a learning-rate sweep section with:
+
+1e-4, 3e-4, 1e-3
+
+This checks whether the result is stable across learning rates or depends on one lucky training configuration.
+
+2. Data augmentation
+
+Training augmentation has been added only to the training split. Validation and test data are kept unchanged.
+
+Augmentations used:
+
+- horizontal flip
+- vertical flip
+- 90-degree rotations
+- small complex Gaussian noise
+
+The augmentation is applied consistently to real and imaginary parts so the complex structure is preserved.
+
+3. Stratified K-fold validation
+
+The notebook now includes a stratified K-fold section.
+
+Important protocol:
+
+- K-fold is run on `train + valid`.
+- The official `test` split is not used inside K-fold.
+- The official `test` split remains a final holdout.
+
+This gives a better estimate of whether the model is stable across different train/validation partitions.
+
+The LR sweep and K-fold cells are controlled by:
+
+RUN_LR_SWEEP = False
+RUN_KFOLD_STUDY = False
+
+They can be changed to `True` in Colab when running the verification experiments.
+
+After these checks, the notebook selects final settings. If LR sweep results exist, the best LR by validation macro-F1 is selected. If they are not run, the conservative default `3e-4` is used.
+
+The final model is then trained on:
+
+train + valid
+
+The official `test` split is evaluated only after final settings are fixed.
+
+## 6. Dataset Split Summary
+
+Usable complete full-pol samples:
+
+train: 1314
+valid: 162
+test : 162
+
+Class distribution is balanced:
+
+train: 219 per class
+valid: 27 per class
+test : 27 per class
+
+Elevation distribution is balanced:
+
+train: 438 each for elevations 40, 45, 50
+valid: 54 each for elevations 40, 45, 50
+test : 54 each for elevations 40, 45, 50
+
+Fast structural split audit found:
+
+- no train-valid base-name overlap
+- no train-test base-name overlap
+- no valid-test base-name overlap
+- no class-elevation-azimuth overlap across splits
+
+Exact byte-level hash checking was not completed locally because it is slow on the full `.dat` set. This should still be run before making a final leakage-free claim.
+
+## 7. Completed Run Results
+
+The completed notebook run used GPU:
+
+Tesla T4
+
+Final test metrics from the best checkpoint:
+
+accuracy        : 1.0000
+precision_macro : 1.0000
+recall_macro    : 1.0000
+f1_macro        : 1.0000
+auc_ovr         : 1.0000
+test_loss       : 0.0311
+
+Confusion matrix:
+
+[[27  0  0  0  0  0]
+ [ 0 27  0  0  0  0]
+ [ 0  0 27  0  0  0]
+ [ 0  0  0 27  0  0]
+ [ 0  0  0  0 27  0]
+ [ 0  0  0  0  0 27]]
+
+## 8. Important Comments / Suspicious Points
+
+The result should not be overclaimed.
+
+The 100% test accuracy and full diagonal confusion matrix are suspicious for a sparse simulated ISAR dataset. It may be correct for the official split, but it needs stronger validation.
+
+Observed concerns:
+
+- Validation accuracy changes significantly across epochs.
+- Best checkpoint gives perfect test performance.
+- Test set is small: only 162 samples, 27 per class.
+- The split is balanced but may still be easy because target identity and simulated scattering structure may be highly class-specific.
+- Magnitude structure alone may carry strong target information.
+- If magnitude-only also gives 100%, phase fusion and feature selection are not needed for improving this official split; they are useful only for robustness analysis or harder splits.
+- Exact file-hash overlap has not yet been completed.
+
+Therefore, the current result should be written as:
+
+The official split appears highly separable under the clean Complex CNN baseline.
+Further leakage checks and harder split protocols are required before claiming robust generalization.
+
+After the latest update, the next result table should include:
+
+- LR sweep result
+- augmentation setting used
+- K-fold mean and standard deviation
+- final untouched-test result
+
+## 9. What Looks Correct Now
+
+The notebook now addresses the guide's earlier objections:
+
+- It is classification-only.
+- It has no detection head.
+- It has no objectness loss.
+- It has no detection weight.
+- It has no bounding-box loss.
+- It uses the dataset author's `.dat` reading format.
+- It shows the Complex CNN architecture clearly.
+- It taps features from a fully connected layer.
+- It extracts magnitude and phase features.
+- It normalizes magnitude and phase to `[-1, 1]`.
+- It computes standard classification metrics.
+
+## 10. What Should Be Done Next
+
+Recommended next experiments:
+
+1. Run exact hash leakage check across train, validation, and test splits.
+2. Run the newly added LR sweep.
+3. Run the newly added stratified K-fold study.
+4. Compare training with and without augmentation.
+5. Train and compare simpler baselines:
+   - magnitude-only CNN
+   - phase-only CNN
+   - complex-input CNN
+   - magnitude + phase fusion CNN
+6. Create a stricter split:
+   - leave-one-azimuth-group-out
+   - leave-one-elevation-out
+   - train on some elevations and test on unseen elevation
+7. Compare against classical features:
+   - scattering center statistics
+   - HOG/texture features on magnitude images
+   - PCA + SVM
+8. Keep object detection in a separate notebook:
+   - YOLO-OBB style detector
+   - transformer-based detector
+   - oriented bounding-box detector
+9. Study SARCLIP separately and adapt the idea to ISAR after the classification baseline is accepted.
+
+## 11. Suggested Email Text
+
+Respected Mam,
+
+I am sharing the corrected classification-only baseline notebook for Pol-ISARSpaceTarget-1.0.
+
+I have removed the earlier detection/objectness components and kept the code focused on Complex CNN based classification. The notebook now reads the `.dat` files using the same layout as the dataset author's `Tools/DataReadPython.py`, uses the four complex polarimetric channels `HH, HV, VH, VV`, taps features from a fully connected layer, extracts magnitude and phase features, normalizes them to `[-1, 1]`, concatenates the feature vectors, and performs classification.
+
+The earlier completed run gave 100% test accuracy on the official split, but I am not treating this as a final robust-generalization claim. Since the confusion matrix was fully diagonal, I have corrected the notebook order: first learning-rate tuning, augmentation, and stratified K-fold validation are run; then final settings are selected; then the final Complex CNN is trained on train + valid; and only after that the untouched test split is evaluated once. I have also noted that exact file-hash leakage checking and stricter split evaluation are still required.
+
+Regards,
+Nischala
+

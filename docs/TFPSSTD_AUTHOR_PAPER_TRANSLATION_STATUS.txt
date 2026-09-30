@@ -1,0 +1,48 @@
+TFPSSTD Author Paper Search and Translation Status
+
+Likely associated paper found:
+
+Title:
+Sub-Terahertz Full-Polarimetric Measurement and ISAR Imaging of Scaled Space Targets
+
+Venue:
+IEEE Transactions on Antennas and Propagation
+
+IEEE document:
+11514979
+
+Dataset link mentioned in the paper:
+https://dx.doi.org/10.21227/aa29-0q14
+
+Authors visible from indexed metadata:
+Yiqi Zhu, Shunping Xiao, Zhiming Xu, Xiaofeng Ai, and co-authors
+
+Abstract-level finding from indexed sources:
+The paper constructs a full-polarimetric sub-terahertz ISAR measurement system in an anechoic chamber, measures three scaled space-target models, performs polarization calibration using calibration objects, verifies calibration using sphere/dihedral targets, proposes a low-sidelobe ISAR imaging method based on dual-dimension reconstruction / dual-ADMM style reconstruction, and releases the TFPSSTD dataset for polarimetric interpretation, enhancement, and target classification.
+
+Current translation limitation:
+The full paper text is not publicly accessible through browser search. IEEE Xplore blocks direct access without institutional login, and ResearchGate currently shows no public full-text PDF. Therefore, a proper English translation cannot be completed until the PDF is provided.
+
+Action needed:
+Download the PDF using institutional IEEE access or ask the guide for the Chinese/author manuscript PDF, then share/upload it. After that, translate section by section:
+
+1. Abstract
+2. Introduction
+3. Measurement system
+4. Polarization calibration
+5. ISAR imaging method
+6. Dataset construction
+7. Experiments/results
+8. Conclusion
+
+Planned gap extraction:
+
+1. Check whether the paper focuses mainly on dataset construction/imaging rather than deep learning.
+2. Check whether object/component detection is absent.
+3. Check whether phase and polarimetric fusion are used only for interpretation, not for modern detectors.
+4. Check whether cross-dataset generalization is absent.
+5. Check whether oriented object detection is absent.
+
+Likely research gap for our paper:
+Existing TFPSSTD work provides calibrated full-polarimetric ISAR data and imaging methodology, but does not establish polarimetric-fusion oriented object detection benchmarks. Our work can fill this by comparing single-pol, fixed Pauli fusion, and learnable polarimetric fusion for OBB detection on Pol-ISARSpaceTarget, then connecting the findings to TFPSSTD full-pol classification/recognition.
+

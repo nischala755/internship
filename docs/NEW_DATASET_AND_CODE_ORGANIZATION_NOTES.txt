@@ -1,0 +1,69 @@
+Code organization update:
+
+I separated the research utilities into three files:
+
+1. src/feature_extraction.py
+
+Contains:
+- full-pol .dat reader
+- HH/HV/VH/VV channel conversion
+- magnitude/phase feature extraction
+- RCS-like feature extraction
+
+2. src/feature_normalization.py
+
+Contains:
+- train-only column statistics
+- raw normalization
+- standard z-score
+- min-max 0 to 1
+- min-max -1 to 1
+- robust IQR
+- max-absolute normalization
+- save/load statistics
+
+3. src/feature_selection.py
+
+Contains:
+- ANOVA-F feature selection
+- mutual information feature selection
+- random forest importance feature selection
+- save/load selected feature indices
+
+New dataset note:
+
+The guide is correct that weights trained on Pol-ISARSpaceTarget-1.0 should not be directly assumed to work on the new TFPSSTD/sub-terahertz dataset. The frequency, target scaling, measurement setup, image formation, and label definitions may differ.
+
+Recommended approach for the new dataset:
+
+1. Inspect folder structure and file formats.
+2. Confirm whether data is complex-valued, magnitude-only, or image format.
+3. Confirm polarimetric channels: HH/HV/VH/VV or another convention.
+4. Confirm labels and whether one downloaded file contains one target or multiple target classes.
+5. Build a new reader/parser.
+6. Extract the same features:
+   - magnitude
+   - phase if complex data is available
+   - RCS-like image-domain power
+7. Compute train-only statistics for the new dataset.
+8. Train from scratch on the new dataset.
+9. Only after that, try transfer learning/domain adaptation.
+
+Is one 4.8GB SAT-1 file enough?
+
+It is enough to:
+- inspect the format
+- build the parser
+- test feature extraction
+- compute magnitude/phase/RCS ranges for that satellite
+
+It is not enough for a complete multi-class classification experiment if SAT-1 contains only one satellite/target class. For classification across satellite types, we need at least two or more labeled classes, ideally all three dataset files if each file corresponds to a different target/set.
+
+Immediate next step:
+
+Please place the downloaded SAT-1 file in a known folder and share the exact path. Then inspect:
+- file extension
+- archive contents
+- channel names
+- labels
+- whether it includes complex data or images only

@@ -1,0 +1,112 @@
+Chinese Paper Translation and Gap Analysis Template
+
+Paper title:
+[Fill after PDF is provided]
+
+Authors:
+[Fill after PDF is provided]
+
+Source:
+TFPSSTD / IEEE DataPort associated publication
+
+============================================================
+1. SECTION-WISE TRANSLATION
+============================================================
+
+Abstract:
+[English translation]
+
+Introduction:
+[English translation]
+
+Dataset / Measurement System:
+[English translation]
+
+Polarimetric Calibration:
+[English translation]
+
+ISAR Imaging Method:
+[English translation]
+
+Experiments:
+[English translation]
+
+Results:
+[English translation]
+
+Conclusion:
+[English translation]
+
+============================================================
+2. TECHNICAL SUMMARY
+============================================================
+
+What problem does the paper solve?
+[Summary]
+
+What dataset is introduced?
+[Summary]
+
+What imaging method is used?
+[Summary]
+
+What polarimetric processing/calibration is used?
+[Summary]
+
+What experiments are performed?
+[Summary]
+
+What metrics are reported?
+[Summary]
+
+============================================================
+3. GAP TABLE
+============================================================
+
+Author's work:
+[Point]
+
+Limitation/gap:
+[Point]
+
+Our possible extension:
+[Point]
+
+Evidence from paper:
+[Page/section]
+
+============================================================
+4. POSSIBLE RESEARCH GAP DIRECTIONS
+============================================================
+
+Gap 1: Limited object/component-level detection
+Our extension: Oriented object detection on Pol-ISARSpaceTarget with polarimetric fusion.
+
+Gap 2: Limited use of phase information
+Our extension: Magnitude + phase feature extraction and comparison.
+
+Gap 3: Limited polarimetric deep learning fusion
+Our extension: Pauli-fusion or attention-based full-pol detector/classifier.
+
+Gap 4: Limited cross-dataset generalization
+Our extension: Compare Pol-ISARSpaceTarget and TFPSSTD behavior, and discuss domain shift.
+
+Gap 5: Limited modern detector benchmarking
+Our extension: YOLO-OBB, transformer/DETR-style detector, and polarimetric-fusion detector comparison.
+
+============================================================
+5. FINAL FINDINGS TO SHOW GUIDE
+============================================================
+
+Key finding 1:
+[Fill]
+
+Key finding 2:
+[Fill]
+
+Key finding 3:
+[Fill]
+
+Most promising paper novelty:
+[Fill]
+
